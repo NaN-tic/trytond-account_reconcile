@@ -1,0 +1,91 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:account.move_reconcile.start,accounts:"
+msgid "Accounts"
+msgstr "Comptes"
+
+msgctxt "field:account.move_reconcile.start,company:"
+msgid "Company"
+msgstr "Empresa"
+
+msgctxt "field:account.move_reconcile.start,end_date:"
+msgid "End Date"
+msgstr "Data final"
+
+msgctxt "field:account.move_reconcile.start,id:"
+msgid "ID"
+msgstr "Identificador"
+
+msgctxt "field:account.move_reconcile.start,max_lines:"
+msgid "Maximum lines"
+msgstr "Màxim línies"
+
+msgctxt "field:account.move_reconcile.start,parties:"
+msgid "Parties"
+msgstr "Tercers"
+
+msgctxt "field:account.move_reconcile.start,start_date:"
+msgid "Start Date"
+msgstr "Data inicial"
+
+msgctxt "help:account.move_reconcile.start,max_lines:"
+msgid "Maximum number of lines to search for balanced amount"
+msgstr "Nombre màxim de línies a buscar per tal de realitzar la conciliació"
+
+msgctxt "model:account.move_reconcile.start,name:"
+msgid "Reconcile Moves"
+msgstr "Conciliar moviments"
+
+msgctxt "model:ir.action,name:wizard_move_reconcile"
+msgid "Automatic Reconciliation"
+msgstr "Conciliació automàtica"
+
+msgctxt "model:ir.ui.menu,name:menu_move_reconcile"
+msgid "Automatic Reconciliation"
+msgstr "Conciliació automàtica"
+
+msgctxt "selection:account.move_reconcile.start,max_lines:"
+msgid "Five"
+msgstr "Cinc"
+
+msgctxt "selection:account.move_reconcile.start,max_lines:"
+msgid "Four"
+msgstr "Quatre"
+
+msgctxt "selection:account.move_reconcile.start,max_lines:"
+msgid "One"
+msgstr "Una"
+
+msgctxt "selection:account.move_reconcile.start,max_lines:"
+msgid "Six"
+msgstr "Sis"
+
+msgctxt "selection:account.move_reconcile.start,max_lines:"
+msgid "Three"
+msgstr "Tres"
+
+msgctxt "selection:account.move_reconcile.start,max_lines:"
+msgid "Two"
+msgstr "Dues"
+
+msgctxt "view:account.move_reconcile.start:"
+msgid "All accounts if empty"
+msgstr "Tots els comptes si es deixa en blanc"
+
+msgctxt "view:account.move_reconcile.start:"
+msgid "All parties if empty"
+msgstr "Tots els tercers si es deixa en blanc"
+
+msgctxt "view:account.move_reconcile.start:"
+msgid "Reconcile Moves"
+msgstr "Conciliar Moviments"
+
+msgctxt "wizard_button:account.move_reconcile,start,end:"
+msgid "Cancel"
+msgstr "Cancel·la"
+
+msgctxt "wizard_button:account.move_reconcile,start,reconcile:"
+msgid "Ok"
+msgstr "D'acord"
