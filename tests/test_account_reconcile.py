@@ -218,6 +218,10 @@ class AccountReconcileTestCase(unittest.TestCase):
         cash, = self.account.search([
                 ('name', '=', 'Main Cash'),
                 ])
+        #Create some parties
+        party, = self.party.create([{
+                        'name': 'Party',
+                    }])
         # Create some moves
         vlist = [
             {
@@ -231,6 +235,7 @@ class AccountReconcileTestCase(unittest.TestCase):
                                 }, {
                                 'account': receivable.id,
                                 'debit': Decimal(100),
+                                'party': party.id,
                                 }]),
                     ],
                 },
@@ -245,6 +250,7 @@ class AccountReconcileTestCase(unittest.TestCase):
                                 }, {
                                 'account': receivable.id,
                                 'debit': Decimal(200),
+                                'party': party.id,
                                 }]),
                     ],
                 },
@@ -259,6 +265,7 @@ class AccountReconcileTestCase(unittest.TestCase):
                                 }, {
                                 'account': receivable.id,
                                 'credit': Decimal(50),
+                                'party': party.id,
                                 }]),
                     ],
                 },
@@ -273,6 +280,7 @@ class AccountReconcileTestCase(unittest.TestCase):
                                 }, {
                                 'account': receivable.id,
                                 'credit': Decimal(75),
+                                'party': party.id,
                                 }]),
                     ],
                 },
@@ -287,6 +295,7 @@ class AccountReconcileTestCase(unittest.TestCase):
                                 }, {
                                 'account': receivable.id,
                                 'credit': Decimal(30),
+                                'party': party.id,
                                 }]),
                     ],
                 },
@@ -301,6 +310,7 @@ class AccountReconcileTestCase(unittest.TestCase):
                                 }, {
                                 'account': receivable.id,
                                 'credit': Decimal(50),
+                                'party': party.id,
                                 }]),
                     ],
                 },
@@ -315,6 +325,7 @@ class AccountReconcileTestCase(unittest.TestCase):
                                 }, {
                                 'account': receivable.id,
                                 'credit': Decimal(45),
+                                'party': party.id,
                                 }]),
                     ],
                 },
@@ -329,6 +340,7 @@ class AccountReconcileTestCase(unittest.TestCase):
                                 }, {
                                 'account': receivable.id,
                                 'credit': Decimal(50),
+                                'party': party.id,
                                 }]),
                     ],
                 },
@@ -350,7 +362,7 @@ class AccountReconcileTestCase(unittest.TestCase):
             session_id, _, _ = self.move_reconcile.create()
             move_reconcile = self.move_reconcile(session_id)
             move_reconcile.start.company = company
-            move_reconcile.start.max_lines = '1'
+            move_reconcile.start.max_lines = '2'
             move_reconcile.start.start_date = None
             move_reconcile.start.end_date = None
             move_reconcile.start.accounts = []
@@ -362,11 +374,11 @@ class AccountReconcileTestCase(unittest.TestCase):
                         ])
             self.assertEqual(len(data['res_id']), 4)
             self.assertEqual(len(to_reconcile), 3)
-            #Reconcile with two levels affect all periods.
+            #Reconcile with two moves affect all periods.
             session_id, _, _ = self.move_reconcile.create()
             move_reconcile = self.move_reconcile(session_id)
             move_reconcile.start.company = company
-            move_reconcile.start.max_lines = '2'
+            move_reconcile.start.max_lines = '3'
             move_reconcile.start.start_date = None
             move_reconcile.start.end_date = None
             move_reconcile.start.accounts = []
@@ -395,7 +407,7 @@ class AccountReconcileTestCase(unittest.TestCase):
             session_id, _, _ = self.move_reconcile.create()
             move_reconcile = self.move_reconcile(session_id)
             move_reconcile.start.company = company
-            move_reconcile.start.max_lines = '1'
+            move_reconcile.start.max_lines = '2'
             move_reconcile.start.start_date = last_period.start_date
             move_reconcile.start.end_date = last_period.end_date
             move_reconcile.start.accounts = []
@@ -414,7 +426,7 @@ class AccountReconcileTestCase(unittest.TestCase):
             session_id, _, _ = self.move_reconcile.create()
             move_reconcile = self.move_reconcile(session_id)
             move_reconcile.start.company = company
-            move_reconcile.start.max_lines = '1'
+            move_reconcile.start.max_lines = '2'
             move_reconcile.start.start_date = None
             move_reconcile.start.end_date = None
             move_reconcile.start.accounts = receivables
@@ -436,7 +448,7 @@ class AccountReconcileTestCase(unittest.TestCase):
             session_id, _, _ = self.move_reconcile.create()
             move_reconcile = self.move_reconcile(session_id)
             move_reconcile.start.company = company
-            move_reconcile.start.max_lines = '1'
+            move_reconcile.start.max_lines = '2'
             move_reconcile.start.start_date = None
             move_reconcile.start.end_date = None
             move_reconcile.start.accounts = []
@@ -462,23 +474,7 @@ class AccountReconcileTestCase(unittest.TestCase):
                         ('reconciliation', '=', None),
                         ])
             self.assertEqual(len(to_reconcile), 8)
-            #Reconcile with one line should not reconcile anyting
-            session_id, _, _ = self.move_reconcile.create()
-            move_reconcile = self.move_reconcile(session_id)
-            move_reconcile.start.company = company
-            move_reconcile.start.max_lines = '1'
-            move_reconcile.start.start_date = None
-            move_reconcile.start.end_date = None
-            move_reconcile.start.accounts = []
-            move_reconcile.start.parties = []
-            _, data = move_reconcile.do_reconcile(None)
-            to_reconcile = self.line.search([
-                        ('account.reconcile', '=', True),
-                        ('reconciliation', '=', None),
-                        ])
-            self.assertEqual(len(data['res_id']), 0)
-            self.assertEqual(len(to_reconcile), 8)
-            #Reconcile with two level should reconcile first move
+            #Reconcile with two moves should not reconcile anyting
             session_id, _, _ = self.move_reconcile.create()
             move_reconcile = self.move_reconcile(session_id)
             move_reconcile.start.company = company
@@ -492,9 +488,9 @@ class AccountReconcileTestCase(unittest.TestCase):
                         ('account.reconcile', '=', True),
                         ('reconciliation', '=', None),
                         ])
-            self.assertEqual(len(data['res_id']), 3)
-            self.assertEqual(len(to_reconcile), 5)
-            #Reconcile with three level should not reconcile anything
+            self.assertEqual(len(data['res_id']), 0)
+            self.assertEqual(len(to_reconcile), 8)
+            #Reconcile with three moves should reconcile first move
             session_id, _, _ = self.move_reconcile.create()
             move_reconcile = self.move_reconcile(session_id)
             move_reconcile.start.company = company
@@ -508,13 +504,29 @@ class AccountReconcileTestCase(unittest.TestCase):
                         ('account.reconcile', '=', True),
                         ('reconciliation', '=', None),
                         ])
-            self.assertEqual(len(data['res_id']), 0)
+            self.assertEqual(len(data['res_id']), 3)
             self.assertEqual(len(to_reconcile), 5)
-            #Reconcile with four level should reconcile second moves
+            #Reconcile with four moves should not reconcile anything
             session_id, _, _ = self.move_reconcile.create()
             move_reconcile = self.move_reconcile(session_id)
             move_reconcile.start.company = company
             move_reconcile.start.max_lines = '4'
+            move_reconcile.start.start_date = None
+            move_reconcile.start.end_date = None
+            move_reconcile.start.accounts = []
+            move_reconcile.start.parties = []
+            _, data = move_reconcile.do_reconcile(None)
+            to_reconcile = self.line.search([
+                        ('account.reconcile', '=', True),
+                        ('reconciliation', '=', None),
+                        ])
+            self.assertEqual(len(data['res_id']), 0)
+            self.assertEqual(len(to_reconcile), 5)
+            #Reconcile with five moves should reconcile second moves
+            session_id, _, _ = self.move_reconcile.create()
+            move_reconcile = self.move_reconcile(session_id)
+            move_reconcile.start.company = company
+            move_reconcile.start.max_lines = '5'
             move_reconcile.start.start_date = None
             move_reconcile.start.end_date = None
             move_reconcile.start.accounts = []
@@ -542,7 +554,7 @@ class AccountReconcileTestCase(unittest.TestCase):
             session_id, _, _ = self.move_reconcile.create()
             move_reconcile = self.move_reconcile(session_id)
             move_reconcile.start.company = company
-            move_reconcile.start.max_lines = '4'
+            move_reconcile.start.max_lines = '5'
             move_reconcile.start.start_date = None
             move_reconcile.start.end_date = None
             move_reconcile.start.accounts = []
@@ -554,6 +566,152 @@ class AccountReconcileTestCase(unittest.TestCase):
                         ])
             self.assertEqual(len(data['res_id']), 15)
             self.assertEqual(len(to_reconcile), 0)
+
+    def test0050_balanced_reconciliation(self):
+        'Test balanced (3 moves each side) reconciliation'
+        with Transaction().start(DB_NAME, USER, context=CONTEXT):
+            fiscalyear, = self.fiscalyear.search([])
+            period = fiscalyear.periods[0]
+            journal_revenue, = self.journal.search([
+                    ('code', '=', 'REV'),
+                    ])
+            journal_cash, = self.journal.search([
+                    ('code', '=', 'CASH'),
+                    ])
+            revenue, = self.account.search([
+                    ('kind', '=', 'revenue'),
+                    ])
+            receivable, = self.account.search([
+                    ('kind', '=', 'receivable'),
+                    ])
+            cash, = self.account.search([
+                    ('name', '=', 'Main Cash'),
+                    ])
+            #Create some parties
+            party, = self.party.create([{
+                            'name': 'Party',
+                        }])
+            # Create some moves
+            vlist = [
+                {
+                    'period': period.id,
+                    'journal': journal_revenue.id,
+                    'date': period.start_date,
+                    'lines': [
+                        ('create', [{
+                                    'account': revenue.id,
+                                    'credit': Decimal(100),
+                                    }, {
+                                    'account': receivable.id,
+                                    'debit': Decimal(100),
+                                    'party': party.id,
+                                    }]),
+                        ],
+                    },
+                {
+                    'period': period.id,
+                    'journal': journal_revenue.id,
+                    'date': period.start_date,
+                    'lines': [
+                        ('create', [{
+                                    'account': revenue.id,
+                                    'credit': Decimal(50),
+                                    }, {
+                                    'account': receivable.id,
+                                    'debit': Decimal(50),
+                                    'party': party.id,
+                                    }]),
+                        ],
+                    },
+                {
+                    'period': period.id,
+                    'journal': journal_revenue.id,
+                    'date': period.start_date,
+                    'lines': [
+                        ('create', [{
+                                    'account': revenue.id,
+                                    'credit': Decimal(150),
+                                    }, {
+                                    'account': receivable.id,
+                                    'debit': Decimal(150),
+                                    'party': party.id,
+                                    }]),
+                        ],
+                    },
+                {
+                    'period': period.id,
+                    'journal': journal_cash.id,
+                    'date': period.start_date,
+                    'lines': [
+                        ('create', [{
+                                    'account': cash.id,
+                                    'debit': Decimal(75),
+                                    }, {
+                                    'account': receivable.id,
+                                    'credit': Decimal(75),
+                                    'party': party.id,
+                                    }]),
+                        ],
+                    },
+                {
+                    'period': period.id,
+                    'journal': journal_cash.id,
+                    'date': period.start_date,
+                    'lines': [
+                        ('create', [{
+                                    'account': cash.id,
+                                    'debit': Decimal(120),
+                                    }, {
+                                    'account': receivable.id,
+                                    'credit': Decimal(120),
+                                    'party': party.id,
+                                    }]),
+                        ],
+                    },
+                {
+                    'period': period.id,
+                    'journal': journal_cash.id,
+                    'date': period.start_date,
+                    'lines': [
+                        ('create', [{
+                                    'account': cash.id,
+                                    'debit': Decimal(105),
+                                    }, {
+                                    'account': receivable.id,
+                                    'credit': Decimal(105),
+                                    'party': party.id,
+                                    }]),
+                        ],
+                    },
+                ]
+            moves = self.move.create(vlist)
+            self.move.post(moves)
+            company, = self.company.search([('rec_name', '=', 'B2CK')])
+            to_reconcile = self.line.search([
+                        ('account.reconcile', '=', True),
+                        ('reconciliation', '=', None),
+                        ])
+            self.assertEqual(len(to_reconcile), 6)
+            #This should reconcile all moves
+            session_id, _, _ = self.move_reconcile.create()
+            move_reconcile = self.move_reconcile(session_id)
+            move_reconcile.start.company = company
+            move_reconcile.start.max_lines = '6'
+            move_reconcile.start.start_date = None
+            move_reconcile.start.end_date = None
+            move_reconcile.start.accounts = []
+            move_reconcile.start.parties = []
+            _, data = move_reconcile.do_reconcile(None)
+            to_reconcile = self.line.search([
+                        ('account.reconcile', '=', True),
+                        ('reconciliation', '=', None),
+                        ])
+            self.assertEqual(len(data['res_id']), 6)
+            self.assertEqual(len(to_reconcile), 0)
+            reconciliations = set([l.reconciliation for l in self.line.browse(
+                    data['res_id'])])
+            #All moves should be on the same reconciliation
+            self.assertEqual(len(reconciliations), 1)
 
 
 def suite():

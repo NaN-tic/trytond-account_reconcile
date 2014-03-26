@@ -31,8 +31,8 @@ msgid "Start Date"
 msgstr "Data inicial"
 
 msgctxt "help:account.move_reconcile.start,max_lines:"
-msgid "Maximum number of lines to search for balanced amount"
-msgstr "Nombre màxim de línies a buscar per tal de realitzar la conciliació"
+msgid "Maximum number of lines to include on a reconciliation"
+msgstr "Nombre màxim d'apunts a incloure en una conciliació"
 
 msgctxt "model:account.move_reconcile.start,name:"
 msgid "Reconcile Moves"
@@ -53,10 +53,6 @@ msgstr "Cinc"
 msgctxt "selection:account.move_reconcile.start,max_lines:"
 msgid "Four"
 msgstr "Quatre"
-
-msgctxt "selection:account.move_reconcile.start,max_lines:"
-msgid "One"
-msgstr "Una"
 
 msgctxt "selection:account.move_reconcile.start,max_lines:"
 msgid "Six"
