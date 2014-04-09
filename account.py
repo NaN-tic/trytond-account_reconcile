@@ -1,6 +1,7 @@
 #The COPYRIGHT file at the top level of this repository contains the full
 #copyright notices and license terms.
 from itertools import combinations
+from dateutil.relativedelta import relativedelta
 from trytond.model import ModelView, fields
 from trytond.wizard import Wizard, StateView, StateAction, Button
 from trytond.transaction import Transaction
@@ -29,8 +30,10 @@ class ReconcileMovesStart(ModelView):
             ('4', 'Four'),
             ('5', 'Five'),
             ('6', 'Six'),
-        ], 'Maximum lines', sort=False, help=('Maximum number of lines to '
-            'include on a reconciliation'))
+        ], 'Maximum Lines', sort=False, required=True,
+        help=('Maximum number of lines to include on a reconciliation'))
+    max_months = fields.Integer('Maximum Months', required=True, help='Maximum '
+        'difference in months of lines to reconcile.')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
 
@@ -41,6 +44,10 @@ class ReconcileMovesStart(ModelView):
     @staticmethod
     def default_max_lines():
         return '2'
+
+    @staticmethod
+    def default_max_months():
+        return 6
 
 
 class ReconcileMoves(Wizard):
@@ -53,7 +60,7 @@ class ReconcileMoves(Wizard):
             ])
     reconcile = StateAction('account.act_move_line_form')
 
-    def do_reconcile(self, action):
+    def reconciliation(self, start_date, end_date):
         pool = Pool()
         Line = pool.get('account.move.line')
         Company = pool.get('company.company')
@@ -64,16 +71,16 @@ class ReconcileMoves(Wizard):
         domain = [
             ('account.reconcile', '=', True),
             ('reconciliation', '=', None),
-        ]
+            ]
 
         if self.start.accounts:
             domain.append(('account', 'in', self.start.accounts))
         if self.start.parties:
             domain.append(('party', 'in', self.start.parties))
-        if self.start.start_date:
-            domain.append(('date', '>=', self.start.start_date))
-        if self.start.end_date:
-            domain.append(('date', '<=', self.start.end_date))
+        if start_date:
+            domain.append(('date', '>=', start_date))
+        if end_date:
+            domain.append(('date', '<=', end_date))
 
         max_lines = int(self.start.max_lines)
 
@@ -105,8 +112,47 @@ class ReconcileMoves(Wizard):
                         for line in to_reconcile:
                             reconciled[line.id] = True
                             lines.remove(line)
+        return reconciled.keys()
 
-        data = {'res_id': reconciled.keys()}
+    def do_reconcile(self, action):
+        pool = Pool()
+        Line = pool.get('account.move.line')
+        Company = pool.get('company.company')
+        transaction = Transaction()
+        cursor = transaction.cursor
+        table = Line.__table__()
+
+        domain = [
+            ('account.reconcile', '=', True),
+            ('reconciliation', '=', None),
+        ]
+
+        if self.start.start_date:
+            domain.append(('date', '>=', self.start.start_date))
+        if self.start.end_date:
+            domain.append(('date', '<=', self.start.end_date))
+
+        start_date = self.start.start_date
+        if not start_date:
+            lines = Line.search([], order=[('date', 'ASC')], limit=1)
+            if not lines:
+                return action, {}
+            start_date = lines[0].date
+        end_date = self.start.end_date
+        if not end_date:
+            lines = Line.search([], order=[('date', 'DESC')], limit=1)
+            if not lines:
+                return action, {}
+            end_date = lines[0].date
+        start = start_date
+        reconciled = []
+        while start <= end_date and start_date and end_date:
+            end = start + relativedelta(months=self.start.max_months)
+            if end > end_date:
+                end = end_date
+            reconciled += self.reconciliation(start, end)
+            start += relativedelta(months=self.start.max_months / 2)
+        data = {'res_id': reconciled}
         return action, data
 
     def _get_lines_order(self):
