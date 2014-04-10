@@ -363,6 +363,7 @@ class AccountReconcileTestCase(unittest.TestCase):
             move_reconcile = self.move_reconcile(session_id)
             move_reconcile.start.company = company
             move_reconcile.start.max_lines = '2'
+            move_reconcile.start.max_months = 12
             move_reconcile.start.start_date = None
             move_reconcile.start.end_date = None
             move_reconcile.start.accounts = []
@@ -379,6 +380,7 @@ class AccountReconcileTestCase(unittest.TestCase):
             move_reconcile = self.move_reconcile(session_id)
             move_reconcile.start.company = company
             move_reconcile.start.max_lines = '3'
+            move_reconcile.start.max_months = 12
             move_reconcile.start.start_date = None
             move_reconcile.start.end_date = None
             move_reconcile.start.accounts = []
@@ -408,6 +410,7 @@ class AccountReconcileTestCase(unittest.TestCase):
             move_reconcile = self.move_reconcile(session_id)
             move_reconcile.start.company = company
             move_reconcile.start.max_lines = '2'
+            move_reconcile.start.max_months = 12
             move_reconcile.start.start_date = last_period.start_date
             move_reconcile.start.end_date = last_period.end_date
             move_reconcile.start.accounts = []
@@ -427,6 +430,7 @@ class AccountReconcileTestCase(unittest.TestCase):
             move_reconcile = self.move_reconcile(session_id)
             move_reconcile.start.company = company
             move_reconcile.start.max_lines = '2'
+            move_reconcile.start.max_months = 12
             move_reconcile.start.start_date = None
             move_reconcile.start.end_date = None
             move_reconcile.start.accounts = receivables
@@ -449,6 +453,7 @@ class AccountReconcileTestCase(unittest.TestCase):
             move_reconcile = self.move_reconcile(session_id)
             move_reconcile.start.company = company
             move_reconcile.start.max_lines = '2'
+            move_reconcile.start.max_months = 12
             move_reconcile.start.start_date = None
             move_reconcile.start.end_date = None
             move_reconcile.start.accounts = []
@@ -479,6 +484,7 @@ class AccountReconcileTestCase(unittest.TestCase):
             move_reconcile = self.move_reconcile(session_id)
             move_reconcile.start.company = company
             move_reconcile.start.max_lines = '2'
+            move_reconcile.start.max_months = 12
             move_reconcile.start.start_date = None
             move_reconcile.start.end_date = None
             move_reconcile.start.accounts = []
@@ -495,6 +501,7 @@ class AccountReconcileTestCase(unittest.TestCase):
             move_reconcile = self.move_reconcile(session_id)
             move_reconcile.start.company = company
             move_reconcile.start.max_lines = '3'
+            move_reconcile.start.max_months = 12
             move_reconcile.start.start_date = None
             move_reconcile.start.end_date = None
             move_reconcile.start.accounts = []
@@ -511,6 +518,7 @@ class AccountReconcileTestCase(unittest.TestCase):
             move_reconcile = self.move_reconcile(session_id)
             move_reconcile.start.company = company
             move_reconcile.start.max_lines = '4'
+            move_reconcile.start.max_months = 12
             move_reconcile.start.start_date = None
             move_reconcile.start.end_date = None
             move_reconcile.start.accounts = []
@@ -527,6 +535,7 @@ class AccountReconcileTestCase(unittest.TestCase):
             move_reconcile = self.move_reconcile(session_id)
             move_reconcile.start.company = company
             move_reconcile.start.max_lines = '5'
+            move_reconcile.start.max_months = 12
             move_reconcile.start.start_date = None
             move_reconcile.start.end_date = None
             move_reconcile.start.accounts = []
@@ -555,6 +564,7 @@ class AccountReconcileTestCase(unittest.TestCase):
             move_reconcile = self.move_reconcile(session_id)
             move_reconcile.start.company = company
             move_reconcile.start.max_lines = '5'
+            move_reconcile.start.max_months = 12
             move_reconcile.start.start_date = None
             move_reconcile.start.end_date = None
             move_reconcile.start.accounts = []
@@ -697,6 +707,7 @@ class AccountReconcileTestCase(unittest.TestCase):
             move_reconcile = self.move_reconcile(session_id)
             move_reconcile.start.company = company
             move_reconcile.start.max_lines = '6'
+            move_reconcile.start.max_months = 12
             move_reconcile.start.start_date = None
             move_reconcile.start.end_date = None
             move_reconcile.start.accounts = []
