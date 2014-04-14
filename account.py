@@ -21,7 +21,8 @@ class ReconcileMovesStart(ModelView):
         domain=[
             ('company', '=', Eval('company')),
             ('reconcile', '=', True),
-        ],
+            ('kind', '!=', 'view'),
+            ],
         depends=['company'])
     parties = fields.Many2Many('party.party', None, None, 'Parties')
     max_lines = fields.Selection([
