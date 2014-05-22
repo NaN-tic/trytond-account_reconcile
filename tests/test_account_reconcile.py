@@ -352,7 +352,8 @@ class AccountReconcileTestCase(unittest.TestCase):
         'Test basic reconciliation'
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
             self.create_moves()
-            company, = self.company.search([('rec_name', '=', 'B2CK')])
+            company, = self.company.search([
+                    ('rec_name', '=', 'Dunder Mifflin')])
             to_reconcile = self.line.search([
                         ('account.reconcile', '=', True),
                         ('reconciliation', '=', None),
@@ -397,7 +398,8 @@ class AccountReconcileTestCase(unittest.TestCase):
         'Test filtered reconciliation'
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
             self.create_moves()
-            company, = self.company.search([('rec_name', '=', 'B2CK')])
+            company, = self.company.search([
+                    ('rec_name', '=', 'Dunder Mifflin')])
             fiscalyear, = self.fiscalyear.search([])
             last_period = fiscalyear.periods[-1]
             to_reconcile = self.line.search([
@@ -472,7 +474,8 @@ class AccountReconcileTestCase(unittest.TestCase):
     def test0030_combined_reconciliation(self):
         'Test combined reconciliation'
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
-            company, = self.company.search([('rec_name', '=', 'B2CK')])
+            company, = self.company.search([
+                    ('rec_name', '=', 'Dunder Mifflin')])
             self.create_complex_moves()
             to_reconcile = self.line.search([
                         ('account.reconcile', '=', True),
@@ -551,7 +554,8 @@ class AccountReconcileTestCase(unittest.TestCase):
     def test0040_full_reconciliation(self):
         'Test full reconciliation'
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
-            company, = self.company.search([('rec_name', '=', 'B2CK')])
+            company, = self.company.search([
+                    ('rec_name', '=', 'Dunder Mifflin')])
             self.create_moves()
             self.create_complex_moves()
             to_reconcile = self.line.search([
@@ -696,7 +700,8 @@ class AccountReconcileTestCase(unittest.TestCase):
                 ]
             moves = self.move.create(vlist)
             self.move.post(moves)
-            company, = self.company.search([('rec_name', '=', 'B2CK')])
+            company, = self.company.search([
+                    ('rec_name', '=', 'Dunder Mifflin')])
             to_reconcile = self.line.search([
                         ('account.reconcile', '=', True),
                         ('reconciliation', '=', None),
