@@ -1,13 +1,6 @@
 #!/usr/bin/env python
 # The COPYRIGHT file at the top level of this repository contains the full
 # copyright notices and license terms.
-import sys
-import os
-DIR = os.path.abspath(os.path.normpath(os.path.join(__file__,
-    '..', '..', '..', '..', '..', 'trytond')))
-if os.path.isdir(DIR):
-    sys.path.insert(0, os.path.dirname(DIR))
-
 import unittest
 import trytond.tests.test_tryton
 from decimal import Decimal
@@ -352,7 +345,9 @@ class AccountReconcileTestCase(unittest.TestCase):
         'Test basic reconciliation'
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
             self.create_moves()
-            company, = self.company.search([('rec_name', '=', 'B2CK')])
+            company, = self.company.search([
+                    ('rec_name', '=', 'Dunder Mifflin'),
+                    ])
             to_reconcile = self.line.search([
                         ('account.reconcile', '=', True),
                         ('reconciliation', '=', None),
@@ -397,7 +392,9 @@ class AccountReconcileTestCase(unittest.TestCase):
         'Test filtered reconciliation'
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
             self.create_moves()
-            company, = self.company.search([('rec_name', '=', 'B2CK')])
+            company, = self.company.search([
+                    ('rec_name', '=', 'Dunder Mifflin'),
+                    ])
             fiscalyear, = self.fiscalyear.search([])
             last_period = fiscalyear.periods[-1]
             to_reconcile = self.line.search([
@@ -472,7 +469,9 @@ class AccountReconcileTestCase(unittest.TestCase):
     def test0030_combined_reconciliation(self):
         'Test combined reconciliation'
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
-            company, = self.company.search([('rec_name', '=', 'B2CK')])
+            company, = self.company.search([
+                    ('rec_name', '=', 'Dunder Mifflin'),
+                    ])
             self.create_complex_moves()
             to_reconcile = self.line.search([
                         ('account.reconcile', '=', True),
@@ -551,7 +550,9 @@ class AccountReconcileTestCase(unittest.TestCase):
     def test0040_full_reconciliation(self):
         'Test full reconciliation'
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
-            company, = self.company.search([('rec_name', '=', 'B2CK')])
+            company, = self.company.search([
+                    ('rec_name', '=', 'Dunder Mifflin'),
+                    ])
             self.create_moves()
             self.create_complex_moves()
             to_reconcile = self.line.search([
@@ -696,7 +697,9 @@ class AccountReconcileTestCase(unittest.TestCase):
                 ]
             moves = self.move.create(vlist)
             self.move.post(moves)
-            company, = self.company.search([('rec_name', '=', 'B2CK')])
+            company, = self.company.search([
+                    ('rec_name', '=', 'Dunder Mifflin'),
+                    ])
             to_reconcile = self.line.search([
                         ('account.reconcile', '=', True),
                         ('reconciliation', '=', None),
@@ -736,6 +739,3 @@ def suite():
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
             AccountReconcileTestCase))
     return suite
-
-if __name__ == '__main__':
-    unittest.TextTestRunner(verbosity=2).run(suite())
