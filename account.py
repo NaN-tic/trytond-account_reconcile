@@ -118,10 +118,6 @@ class ReconcileMoves(Wizard):
     def do_reconcile(self, action):
         pool = Pool()
         Line = pool.get('account.move.line')
-        Company = pool.get('company.company')
-        transaction = Transaction()
-        cursor = transaction.cursor
-        table = Line.__table__()
 
         domain = [
             ('account.reconcile', '=', True),
@@ -152,7 +148,7 @@ class ReconcileMoves(Wizard):
             if end > end_date:
                 end = end_date
             reconciled += self.reconciliation(start, end)
-            start += relativedelta(months=self.start.max_months / 2)
+            start += relativedelta(months=max(1, self.start.max_months / 2))
         data = {'res_id': reconciled}
         return action, data
 
