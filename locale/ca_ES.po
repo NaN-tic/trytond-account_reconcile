@@ -16,11 +16,15 @@ msgstr "Data final"
 
 msgctxt "field:account.move_reconcile.start,id:"
 msgid "ID"
-msgstr "Identificador"
+msgstr "ID"
 
 msgctxt "field:account.move_reconcile.start,max_lines:"
-msgid "Maximum lines"
+msgid "Maximum Lines"
 msgstr "Màxim línies"
+
+msgctxt "field:account.move_reconcile.start,max_months:"
+msgid "Maximum Months"
+msgstr "Màxim mesos"
 
 msgctxt "field:account.move_reconcile.start,parties:"
 msgid "Parties"
@@ -33,6 +37,10 @@ msgstr "Data inicial"
 msgctxt "help:account.move_reconcile.start,max_lines:"
 msgid "Maximum number of lines to include on a reconciliation"
 msgstr "Nombre màxim d'apunts a incloure en una conciliació"
+
+msgctxt "help:account.move_reconcile.start,max_months:"
+msgid "Maximum difference in months of lines to reconcile."
+msgstr "Nombre màxim d'apunts a reconciliar."
 
 msgctxt "model:account.move_reconcile.start,name:"
 msgid "Reconcile Moves"
