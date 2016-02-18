@@ -86,7 +86,7 @@ class ReconcileMoves(Wizard):
         max_lines = int(self.start.max_lines)
 
         currency = Company(transaction.context.get('company')).currency
-        reconciled = {}
+        reconciled = set()
 
         #Get grouped by account and party in order to not fetch all the moves
         #in memory and only fetch the ones that can be reconciled.
@@ -104,16 +104,16 @@ class ReconcileMoves(Wizard):
             lines = Line.search(simple_domain, order=order)
             for size in range(2, max_lines + 1):
                 for to_reconcile in combinations(lines, size):
-                    if any([l.id in reconciled for l in to_reconcile]):
+                    if set([l.id for l in to_reconcile]) & reconciled:
                         continue
                     pending_amount = sum([l.debit - l.credit for l in
                             to_reconcile])
                     if currency.is_zero(pending_amount):
                         Line.reconcile(to_reconcile)
                         for line in to_reconcile:
-                            reconciled[line.id] = True
+                            reconciled.add(line.id)
                             lines.remove(line)
-        return reconciled.keys()
+        return list(reconciled)
 
     def do_reconcile(self, action):
         pool = Pool()
