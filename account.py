@@ -64,9 +64,8 @@ class ReconcileMoves(Wizard):
     def reconciliation(self, start_date, end_date):
         pool = Pool()
         Line = pool.get('account.move.line')
-        Company = pool.get('company.company')
-        transaction = Transaction()
-        cursor = transaction.cursor
+        Account = pool.get('account.account')
+        cursor = Transaction().connection.cursor()
         table = Line.__table__()
 
         domain = [
@@ -85,7 +84,6 @@ class ReconcileMoves(Wizard):
 
         max_lines = int(self.start.max_lines)
 
-        currency = Company(transaction.context.get('company')).currency
         reconciled = set()
 
         #Get grouped by account and party in order to not fetch all the moves
@@ -100,6 +98,7 @@ class ReconcileMoves(Wizard):
                 ('account', '=', account),
                 ('party', '=', party),
                 ]
+            currency = Account(account).company.currency
             order = self._get_lines_order()
             lines = Line.search(simple_domain, order=order)
             for size in range(2, max_lines + 1):
