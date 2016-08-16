@@ -147,7 +147,7 @@ class ReconcileMoves(Wizard):
             if end > end_date:
                 end = end_date
             reconciled += self.reconciliation(start, end)
-            start += relativedelta(months=max(1, self.start.max_months / 2))
+            start += relativedelta(months=max(1, self.start.max_months // 2))
         data = {'res_id': reconciled}
         return action, data
 
