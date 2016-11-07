@@ -14,7 +14,7 @@
             <field name="wiz_name">account.move_reconcile</field>
         </record>
 
-        <menuitem parent="account.menu_entries"
+        <menuitem parent="account.menu_processing"
             action="wizard_move_reconcile" id="menu_move_reconcile"/>
 
     </data>
