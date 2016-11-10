@@ -16,7 +16,7 @@ msgstr "Fecha final"
 
 msgctxt "field:account.move_reconcile.start,id:"
 msgid "ID"
-msgstr "ID"
+msgstr "Identificador"
 
 msgctxt "field:account.move_reconcile.start,max_lines:"
 msgid "Maximum Lines"
