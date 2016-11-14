@@ -86,7 +86,7 @@ class AccountReconcileTestCase(ModuleTestCase):
         expense = accounts['expense']
         payable = accounts['payable']
         cash = accounts['cash']
-        #Create some parties
+        # Create some parties
         customer1, customer2, supplier1, supplier2 = self.create_parties(
             company)
         # Create some moves
@@ -220,7 +220,7 @@ class AccountReconcileTestCase(ModuleTestCase):
         revenue = accounts['revenue']
         receivable = accounts['receivable']
         cash = accounts['cash']
-        #Create some parties
+        # Create some parties
         party = self.create_parties(company)[0]
         # Create some moves
         vlist = [
@@ -369,7 +369,7 @@ class AccountReconcileTestCase(ModuleTestCase):
                     ('reconciliation', '=', None),
                     ])
         self.assertEqual(len(to_reconcile), 7)
-        #Reconcile with no dates should affect all periods.
+        # Reconcile with no dates should affect all periods.
         session_id, _, _ = MoveReconcile.create()
         move_reconcile = MoveReconcile(session_id)
         move_reconcile.start.company = company
@@ -386,7 +386,7 @@ class AccountReconcileTestCase(ModuleTestCase):
                     ])
         self.assertEqual(len(data['res_id']), 4)
         self.assertEqual(len(to_reconcile), 3)
-        #Reconcile with two moves affect all periods.
+        # Reconcile with two moves affect all periods.
         session_id, _, _ = MoveReconcile.create()
         move_reconcile = MoveReconcile(session_id)
         move_reconcile.start.company = company
@@ -422,7 +422,7 @@ class AccountReconcileTestCase(ModuleTestCase):
                     ('reconciliation', '=', None),
                     ])
         self.assertEqual(len(to_reconcile), 7)
-        #Reconcile last period should not change anything.
+        # Reconcile last period should not change anything.
         session_id, _, _ = MoveReconcile.create()
         move_reconcile = MoveReconcile(session_id)
         move_reconcile.start.company = company
@@ -439,7 +439,7 @@ class AccountReconcileTestCase(ModuleTestCase):
                     ])
         self.assertEqual(len(data['res_id']), 0)
         self.assertEqual(len(to_reconcile), 7)
-        #Reconcile filtered by account.
+        # Reconcile filtered by account.
         receivables = Account.search([
                 ('kind', '=', 'receivable')
                 ])
@@ -462,7 +462,7 @@ class AccountReconcileTestCase(ModuleTestCase):
         self.assertEqual(all([l.account == receivable for l in
                     Line.browse(data['res_id'])]), True)
         self.assertEqual(len(to_reconcile), 5)
-        #Reconcile filtered by party.
+        # Reconcile filtered by party.
         suppliers = Party.search([
                 ('name', '=', 'supplier1'),
                 ])
@@ -500,7 +500,7 @@ class AccountReconcileTestCase(ModuleTestCase):
                     ('reconciliation', '=', None),
                     ])
         self.assertEqual(len(to_reconcile), 8)
-        #Reconcile with two moves should not reconcile anyting
+        # Reconcile with two moves should not reconcile anyting
         session_id, _, _ = MoveReconcile.create()
         move_reconcile = MoveReconcile(session_id)
         move_reconcile.start.company = company
@@ -517,7 +517,7 @@ class AccountReconcileTestCase(ModuleTestCase):
                     ])
         self.assertEqual(len(data['res_id']), 0)
         self.assertEqual(len(to_reconcile), 8)
-        #Reconcile with three moves should reconcile first move
+        # Reconcile with three moves should reconcile first move
         session_id, _, _ = MoveReconcile.create()
         move_reconcile = MoveReconcile(session_id)
         move_reconcile.start.company = company
@@ -534,7 +534,7 @@ class AccountReconcileTestCase(ModuleTestCase):
                     ])
         self.assertEqual(len(data['res_id']), 3)
         self.assertEqual(len(to_reconcile), 5)
-        #Reconcile with four moves should not reconcile anything
+        # Reconcile with four moves should not reconcile anything
         session_id, _, _ = MoveReconcile.create()
         move_reconcile = MoveReconcile(session_id)
         move_reconcile.start.company = company
@@ -551,7 +551,7 @@ class AccountReconcileTestCase(ModuleTestCase):
                     ])
         self.assertEqual(len(data['res_id']), 0)
         self.assertEqual(len(to_reconcile), 5)
-        #Reconcile with five moves should reconcile second moves
+        # Reconcile with five moves should reconcile second moves
         session_id, _, _ = MoveReconcile.create()
         move_reconcile = MoveReconcile(session_id)
         move_reconcile.start.company = company
@@ -583,7 +583,7 @@ class AccountReconcileTestCase(ModuleTestCase):
                     ('reconciliation', '=', None),
                     ])
         self.assertEqual(len(to_reconcile), 15)
-        #This should reconcile all moves
+        # This should reconcile all moves
         session_id, _, _ = MoveReconcile.create()
         move_reconcile = MoveReconcile(session_id)
         move_reconcile.start.company = company
@@ -725,7 +725,7 @@ class AccountReconcileTestCase(ModuleTestCase):
                     ('reconciliation', '=', None),
                     ])
         self.assertEqual(len(to_reconcile), 6)
-        #This should reconcile all moves
+        # This should reconcile all moves
         session_id, _, _ = MoveReconcile.create()
         move_reconcile = MoveReconcile(session_id)
         move_reconcile.start.company = company
@@ -744,7 +744,7 @@ class AccountReconcileTestCase(ModuleTestCase):
         self.assertEqual(len(to_reconcile), 0)
         reconciliations = set([l.reconciliation for l in Line.browse(
                 data['res_id'])])
-        #All moves should be on the same reconciliation
+        # All moves should be on the same reconciliation
         self.assertEqual(len(reconciliations), 1)
 
 

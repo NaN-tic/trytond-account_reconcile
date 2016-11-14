@@ -1,5 +1,5 @@
-#The COPYRIGHT file at the top level of this repository contains the full
-#copyright notices and license terms.
+# The COPYRIGHT file at the top level of this repository contains the full
+# copyright notices and license terms.
 from itertools import combinations
 from dateutil.relativedelta import relativedelta
 import logging
@@ -33,10 +33,10 @@ class ReconcileMovesStart(ModelView):
             ('4', 'Four'),
             ('5', 'Five'),
             ('6', 'Six'),
-        ], 'Maximum Lines', sort=False, required=True,
-        help=('Maximum number of lines to include on a reconciliation'))
-    max_months = fields.Integer('Maximum Months', required=True, help='Maximum '
-        'difference in months of lines to reconcile.')
+            ], 'Maximum Lines', sort=False, required=True,
+            help=('Maximum number of lines to include on a reconciliation'))
+    max_months = fields.Integer('Maximum Months', required=True,
+        help='Maximum difference in months of lines to reconcile.')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
 
@@ -66,7 +66,6 @@ class ReconcileMoves(Wizard):
     def reconciliation(self, start_date, end_date):
         pool = Pool()
         Line = pool.get('account.move.line')
-        Account = pool.get('account.account')
         cursor = Transaction().connection.cursor()
         table = Line.__table__()
 
@@ -74,19 +73,16 @@ class ReconcileMoves(Wizard):
             ('account.company', '=', self.start.company.id),
             ('account.reconcile', '=', True),
             ('reconciliation', '=', None),
+            ('date', '>=', start_date),
+            ('date', '<=', end_date),
             ]
 
         if self.start.accounts:
             domain.append(('account', 'in', self.start.accounts))
         if self.start.parties:
             domain.append(('party', 'in', self.start.parties))
-        if start_date:
-            domain.append(('date', '>=', start_date))
-        if end_date:
-            domain.append(('date', '<=', end_date))
 
         max_lines = int(self.start.max_lines)
-
         reconciled = set()
 
         # Get grouped by account and party in order to not fetch all the moves
@@ -121,16 +117,6 @@ class ReconcileMoves(Wizard):
         pool = Pool()
         Line = pool.get('account.move.line')
         logger = logging.getLogger(self.__name__)
-
-        domain = [
-            ('account.reconcile', '=', True),
-            ('reconciliation', '=', None),
-        ]
-
-        if self.start.start_date:
-            domain.append(('date', '>=', self.start.start_date))
-        if self.start.end_date:
-            domain.append(('date', '<=', self.start.end_date))
 
         start_date = self.start.start_date
         if not start_date:
