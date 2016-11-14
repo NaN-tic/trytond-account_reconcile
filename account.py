@@ -2,6 +2,8 @@
 #copyright notices and license terms.
 from itertools import combinations
 from dateutil.relativedelta import relativedelta
+import logging
+
 from trytond.model import ModelView, fields
 from trytond.wizard import Wizard, StateView, StateAction, Button
 from trytond.transaction import Transaction
@@ -87,8 +89,8 @@ class ReconcileMoves(Wizard):
 
         reconciled = set()
 
-        #Get grouped by account and party in order to not fetch all the moves
-        #in memory and only fetch the ones that can be reconciled.
+        # Get grouped by account and party in order to not fetch all the moves
+        # in memory and only fetch the ones that can be reconciled.
         query = Line.search(domain, query=True)
         cursor.execute(*table.select(table.account, table.party,
                 where=(table.id.in_(query)),
@@ -118,6 +120,7 @@ class ReconcileMoves(Wizard):
     def do_reconcile(self, action):
         pool = Pool()
         Line = pool.get('account.move.line')
+        logger = logging.getLogger(self.__name__)
 
         domain = [
             ('account.reconcile', '=', True),
@@ -143,12 +146,18 @@ class ReconcileMoves(Wizard):
             end_date = lines[0].date
         start = start_date
         reconciled = []
+        logger.info('Starting moves reconciliation')
         while start <= end_date and start_date and end_date:
             end = start + relativedelta(months=self.start.max_months)
             if end > end_date:
                 end = end_date
-            reconciled += self.reconciliation(start, end)
+            logger.debug('Reconciling lines between %s and %s', start,
+                end)
+            result = self.reconciliation(start, end)
+            reconciled += result
+            logger.debug('Reconciled %d lines', len(result))
             start += relativedelta(months=max(1, self.start.max_months // 2))
+        logger.info('Finished. Reconciled %d lines', len(reconciled))
         data = {'res_id': reconciled}
         return action, data
 
