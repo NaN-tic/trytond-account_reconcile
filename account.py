@@ -69,6 +69,7 @@ class ReconcileMoves(Wizard):
         table = Line.__table__()
 
         domain = [
+            ('account.company', '=', self.start.company.id),
             ('account.reconcile', '=', True),
             ('reconciliation', '=', None),
             ]
@@ -93,12 +94,12 @@ class ReconcileMoves(Wizard):
                 where=(table.id.in_(query)),
                 group_by=(table.account, table.party)))
 
+        currency = self.start.company.currency
         for account, party in cursor.fetchall():
             simple_domain = domain + [
                 ('account', '=', account),
                 ('party', '=', party),
                 ]
-            currency = Account(account).company.currency
             order = self._get_lines_order()
             lines = Line.search(simple_domain, order=order)
             for size in range(2, max_lines + 1):
