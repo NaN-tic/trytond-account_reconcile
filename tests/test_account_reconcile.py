@@ -7,7 +7,7 @@ from trytond.pool import Pool
 import trytond.tests.test_tryton
 from trytond.tests.test_tryton import ModuleTestCase, with_transaction
 from trytond.modules.company.tests import create_company, set_company
-from trytond.modules.account.tests import create_chart, get_fiscalyear
+from trytond.modules.account.tests import create_chart, get_fiscalyear, get_accounts
 
 
 class AccountReconcileTestCase(ModuleTestCase):
@@ -36,20 +36,13 @@ class AccountReconcileTestCase(ModuleTestCase):
     def get_accounts(self, company):
         pool = Pool()
         Account = pool.get('account.account')
-        accounts = Account.search([
-                ('kind', 'in',
-                    ['receivable', 'payable', 'revenue', 'expense']),
-                ('company', '=', company.id),
-                ])
-        accounts = {a.kind: a for a in accounts}
+        accounts = get_accounts(company, config=config)
         cash, = Account.search([
-                ('kind', '=', 'other'),
                 ('name', '=', 'Main Cash'),
                 ('company', '=', company.id),
                 ])
         accounts['cash'] = cash
         tax, = Account.search([
-                ('kind', '=', 'other'),
                 ('name', '=', 'Main Tax'),
                 ('company', '=', company.id),
                 ])
