@@ -23,7 +23,7 @@ class ReconcileMovesStart(ModelView):
         domain=[
             ('company', '=', Eval('company')),
             ('reconcile', '=', True),
-            ('kind', '!=', 'view'),
+            ('type', '!=', None),
             ],
         depends=['company'])
     parties = fields.Many2Many('party.party', None, None, 'Parties')
