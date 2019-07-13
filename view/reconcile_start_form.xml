@@ -8,6 +8,8 @@
     <field name="max_lines"/>
     <label name="max_months"/>
     <field name="max_months"/>
+    <label name="timeout"/>
+    <field name="timeout"/>
     <label name="start_date"/>
     <field name="start_date"/>
     <label name="end_date"/>

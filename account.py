@@ -2,6 +2,7 @@
 # copyright notices and license terms.
 from itertools import combinations
 from dateutil.relativedelta import relativedelta
+from datetime import datetime, timedelta
 import logging
 
 from trytond.model import ModelView, fields
@@ -11,6 +12,7 @@ from trytond.pyson import Eval
 from trytond.pool import Pool
 
 __all__ = ['ReconcileMovesStart', 'ReconcileMoves']
+logger = logging.getLogger(__name__)
 
 
 class ReconcileMovesStart(ModelView):
@@ -39,6 +41,7 @@ class ReconcileMovesStart(ModelView):
         help='Maximum difference in months of lines to reconcile.')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
+    timeout = fields.TimeDelta('Maximum Computation Time', required=True)
 
     @staticmethod
     def default_company():
@@ -52,6 +55,10 @@ class ReconcileMovesStart(ModelView):
     def default_max_months():
         return 6
 
+    @staticmethod
+    def default_timeout():
+        return timedelta(minutes=5)
+
 
 class ReconcileMoves(Wizard):
     'Reconcile Moves'
@@ -63,7 +70,7 @@ class ReconcileMoves(Wizard):
             ])
     reconcile = StateAction('account.act_move_line_form')
 
-    def reconciliation(self, start_date, end_date):
+    def reconciliation(self, start_date, end_date, timeout):
         pool = Pool()
         Line = pool.get('account.move.line')
         cursor = Transaction().connection.cursor()
@@ -92,7 +99,7 @@ class ReconcileMoves(Wizard):
                 where=(table.id.in_(query)),
                 group_by=(table.account, table.party)))
 
-        currency = self.start.company.currency
+        #currency = self.start.company.currency
         for account, party in cursor.fetchall():
             simple_domain = domain + [
                 ('account', '=', account),
@@ -100,23 +107,32 @@ class ReconcileMoves(Wizard):
                 ]
             order = self._get_lines_order()
             lines = Line.search(simple_domain, order=order)
+            lines = [(x.id, x.debit - x.credit) for x in lines]
+            count = 0
             for size in range(2, max_lines + 1):
+                logger.info('Reconciling %d in %d batches' % (len(lines), size))
                 for to_reconcile in combinations(lines, size):
-                    if set([l.id for l in to_reconcile]) & reconciled:
-                        continue
-                    pending_amount = sum([l.debit - l.credit for l in
-                            to_reconcile])
-                    if currency.is_zero(pending_amount):
-                        Line.reconcile(to_reconcile)
+                    count += 1
+                    if count % 10000000 == 0:
+                        logger.info('%d combinations processed with %d lines '
+                            'reconciled' % (count, len(reconciled)))
+                        if datetime.now() > timeout:
+                            logger.info('Timeout reached.')
+                            return list(reconciled)
+                    pending_amount = sum([x[1] for x in to_reconcile])
+                    if pending_amount == 0:
+                        ids = [x[0] for x in to_reconcile]
+                        if set(ids) & reconciled:
+                            continue
+                        Line.reconcile(Line.browse(ids))
                         for line in to_reconcile:
-                            reconciled.add(line.id)
+                            reconciled.add(line[0])
                             lines.remove(line)
         return list(reconciled)
 
     def do_reconcile(self, action):
         pool = Pool()
         Line = pool.get('account.move.line')
-        logger = logging.getLogger(self.__name__)
 
         start_date = self.start.start_date
         if not start_date:
@@ -133,15 +149,18 @@ class ReconcileMoves(Wizard):
         start = start_date
         reconciled = []
         logger.info('Starting moves reconciliation')
+        timeout = datetime.now() + self.start.timeout
         while start <= end_date and start_date and end_date:
             end = start + relativedelta(months=self.start.max_months)
             if end > end_date:
                 end = end_date
-            logger.debug('Reconciling lines between %s and %s', start,
+            logger.info('Reconciling lines between %s and %s', start,
                 end)
-            result = self.reconciliation(start, end)
+            result = self.reconciliation(start, end, timeout)
             reconciled += result
-            logger.debug('Reconciled %d lines', len(result))
+            logger.info('Reconciled %d lines', len(result))
+            if datetime.now() > timeout:
+                break
             start += relativedelta(months=max(1, self.start.max_months // 2))
         logger.info('Finished. Reconciled %d lines', len(reconciled))
         data = {'res_id': reconciled}
