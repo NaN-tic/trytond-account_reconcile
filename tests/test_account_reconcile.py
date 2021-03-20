@@ -36,7 +36,7 @@ class AccountReconcileTestCase(ModuleTestCase):
     def get_accounts(self, company):
         pool = Pool()
         Account = pool.get('account.account')
-        accounts = get_accounts(company, config=config)
+        accounts = get_accounts(company)
         cash, = Account.search([
                 ('name', '=', 'Main Cash'),
                 ('company', '=', company.id),
