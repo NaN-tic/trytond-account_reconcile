@@ -110,6 +110,9 @@ class ReconcileMoves(Wizard):
             lines = [(x.id, x.debit - x.credit) for x in lines]
             count = 0
             for size in range(2, max_lines + 1):
+                if datetime.now() > timeout:
+                    logger.info('Timeout reached.')
+                    return list(reconciled)
                 logger.info('Reconciling %d in %d batches' % (len(lines), size))
                 for to_reconcile in combinations(lines, size):
                     count += 1
