@@ -4,11 +4,12 @@ from itertools import combinations
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
 import logging
+import re
 
-from trytond.model import ModelView, fields
+from trytond.model import ModelSQL, ModelView, fields
 from trytond.wizard import Wizard, StateView, StateAction, Button
 from trytond.transaction import Transaction
-from trytond.pyson import Eval
+from trytond.pyson import Bool, Eval
 from trytond.pool import Pool
 
 __all__ = ['ReconcileMovesStart', 'ReconcileMoves']
@@ -36,12 +37,16 @@ class ReconcileMovesStart(ModelView):
             ('5', 'Five'),
             ('6', 'Six'),
             ], 'Maximum Lines', sort=False, required=True,
-            help=('Maximum number of lines to include on a reconciliation'))
-    max_months = fields.Integer('Maximum Months', required=True,
+            help=('Maximum number of lines to include on a reconciliation'),
+            states={'invisible': ~Bool(Eval('use_combinations'))},
+            depends=['use_combinations'])
+    max_days = fields.Integer('Maximum days', required=True,
         help='Maximum difference in months of lines to reconcile.')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     timeout = fields.TimeDelta('Maximum Computation Time', required=True)
+    use_combinations = fields.Boolean("Use Combinations")
+    use_rules = fields.Boolean("Use Rules")
 
     @staticmethod
     def default_company():
@@ -52,12 +57,30 @@ class ReconcileMovesStart(ModelView):
         return '2'
 
     @staticmethod
-    def default_max_months():
+    def default_max_days():
         return 6
 
     @staticmethod
     def default_timeout():
         return timedelta(minutes=5)
+
+    @staticmethod
+    def default_use_combinations():
+        return True
+
+
+class ReconcileRule(ModelSQL, ModelView):
+    'Reconcile Rule'
+    __name__ = 'account.move_reconcile.rule'
+    company = fields.Many2One('company.company', 'Company', required=True)
+    account = fields.Many2One('account.account', 'Account', required=True,
+        domain=[('company', '=', Eval('company', -1))], depends=['company'])
+    expression = fields.Char('Regular Expression',
+        help='Example: Invoice nº((\\d|\\s)+)')
+
+    @staticmethod
+    def default_company():
+        return Transaction().context.get('company')
 
 
 class ReconcileMoves(Wizard):
@@ -73,6 +96,7 @@ class ReconcileMoves(Wizard):
     def reconciliation(self, start_date, end_date, timeout):
         pool = Pool()
         Line = pool.get('account.move.line')
+        ReconcileRule = pool.get('account.move_reconcile.rule')
         cursor = Transaction().connection.cursor()
         table = Line.__table__()
 
@@ -107,30 +131,59 @@ class ReconcileMoves(Wizard):
                 ]
             order = self._get_lines_order()
             lines = Line.search(simple_domain, order=order)
-            lines = [(x.id, x.debit - x.credit) for x in lines]
-            count = 0
-            for size in range(2, max_lines + 1):
-                if datetime.now() > timeout:
-                    logger.info('Timeout reached.')
-                    return list(reconciled)
-                logger.info('Reconciling %d in %d batches' % (len(lines), size))
-                for to_reconcile in combinations(lines, size):
-                    count += 1
-                    if count % 10000000 == 0:
-                        logger.info('%d combinations processed with %d lines '
-                            'reconciled' % (count, len(reconciled)))
-                        if datetime.now() > timeout:
-                            logger.info('Timeout reached.')
-                            return list(reconciled)
-                    pending_amount = sum([x[1] for x in to_reconcile])
-                    if pending_amount == 0:
-                        ids = [x[0] for x in to_reconcile]
-                        if set(ids) & reconciled:
-                            continue
-                        Line.reconcile(Line.browse(ids))
-                        for line in to_reconcile:
-                            reconciled.add(line[0])
-                            lines.remove(line)
+            if self.start.use_rules:
+                user_company = Transaction().context.get('company')
+                rules = ReconcileRule.search([
+                    ('account', '=', account),
+                    ('company', '=', user_company)
+                    ])
+                regexes = [re.compile(x.expression) for x in rules]
+                if regexes:
+                    numbers = {}
+                    for line in lines:
+                        if line.description:
+                            for regex in regexes:
+                                match = regex.search(line.description)
+                                if match:
+                                    id = match.group().replace(' ', '')
+                                    numbers.setdefault(id, [])
+                                    numbers[id].append(line)
+                                    break
+                    for lines in numbers.values():
+                        if len(lines) > 1:
+                            amount = sum([x.debit - x.credit for x in lines])
+                            if amount == 0:
+                                Line.reconcile(lines)
+                                for line in lines:
+                                    reconciled.add(line.id)
+            if self.start.use_combinations:
+                lines = Line.search(simple_domain, order=order)
+                lines = [(x.id, x.debit - x.credit) for x in lines]
+                count = 0
+                for size in range(2, max_lines + 1):
+                    if datetime.now() > timeout:
+                        logger.info('Timeout reached.')
+                        return list(reconciled)
+                    logger.info(
+                        'Reconciling %d in %d batches' % (len(lines), size))
+                    for to_reconcile in combinations(lines, size):
+                        count += 1
+                        if count % 10000000 == 0:
+                            logger.info(
+                                '%d combinations processed with %d lines '
+                                'reconciled' % (count, len(reconciled)))
+                            if datetime.now() > timeout:
+                                logger.info('Timeout reached.')
+                                return list(reconciled)
+                        pending_amount = sum([x[1] for x in to_reconcile])
+                        if pending_amount == 0:
+                            ids = [x[0] for x in to_reconcile]
+                            if set(ids) & reconciled:
+                                continue
+                            Line.reconcile(Line.browse(ids))
+                            for line in to_reconcile:
+                                reconciled.add(line[0])
+                                lines.remove(line)
         return list(reconciled)
 
     def do_reconcile(self, action):
@@ -154,7 +207,7 @@ class ReconcileMoves(Wizard):
         logger.info('Starting moves reconciliation')
         timeout = datetime.now() + self.start.timeout
         while start <= end_date and start_date and end_date:
-            end = start + relativedelta(months=self.start.max_months)
+            end = start + relativedelta(days=self.start.max_days)
             if end > end_date:
                 end = end_date
             logger.info('Reconciling lines between %s and %s', start,
@@ -164,7 +217,7 @@ class ReconcileMoves(Wizard):
             logger.info('Reconciled %d lines', len(result))
             if datetime.now() > timeout:
                 break
-            start += relativedelta(months=max(1, self.start.max_months // 2))
+            start += relativedelta(days=max(1, self.start.max_days // 2))
         logger.info('Finished. Reconciled %d lines', len(reconciled))
         data = {'res_id': reconciled}
         return action, data

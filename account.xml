@@ -14,8 +14,45 @@
             <field name="wiz_name">account.move_reconcile</field>
         </record>
 
+        <record model="ir.ui.view" id="reconcile_rule_view_tree">
+            <field name="model">account.move_reconcile.rule</field>
+            <field name="type">tree</field>
+            <field name="name">reconcile_rule_tree</field>
+        </record>
+        <record model="ir.ui.view" id="reconcile_rule_view_form">
+            <field name="model">account.move_reconcile.rule</field>
+            <field name="type">form</field>
+            <field name="name">reconcile_rule_form</field>
+        </record>
+        <record model="ir.action.act_window" id="act_reconcile_rule">
+            <field name="name">Reconcile Rules</field>
+            <field name="res_model">account.move_reconcile.rule</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_reconcile_rule_form_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="reconcile_rule_view_tree"/>
+            <field name="act_window" ref="act_reconcile_rule"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_reconcile_rule_form_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="reconcile_rule_view_form"/>
+            <field name="act_window" ref="act_reconcile_rule"/>
+        </record>
+
+        <record model="ir.rule.group" id="rule_group_reconcile_rule">
+            <field name="name">Reconcile Rule Group</field>
+            <field name="model" search="[('model', '=', 'account.move_reconcile.rule')]"/>
+            <field name="global_p" eval="True"/>
+        </record>
+        <record model="ir.rule" id="rule_reconcile_rule">
+            <field name="domain" eval="[('company', 'in', Eval('user', {}).get('companies', []))]" pyson="1"/>
+            <field name="rule_group" ref="rule_group_reconcile_rule"/>
+        </record>
+
         <menuitem parent="account.menu_processing"
             action="wizard_move_reconcile" id="menu_move_reconcile"/>
+        <menuitem parent="account.menu_account_configuration"
+            action="act_reconcile_rule" id="menu_reconcile_rule"/>
 
     </data>
 </tryton>
