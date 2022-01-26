@@ -11,6 +11,9 @@ from trytond.wizard import Wizard, StateView, StateAction, Button
 from trytond.transaction import Transaction
 from trytond.pyson import Bool, Eval
 from trytond.pool import Pool
+from trytond.exceptions import UserError
+from trytond.i18n import gettext
+
 
 __all__ = ['ReconcileMovesStart', 'ReconcileMoves']
 logger = logging.getLogger(__name__)
@@ -137,7 +140,14 @@ class ReconcileMoves(Wizard):
                     ('account', '=', account),
                     ('company', '=', user_company)
                     ])
-                regexes = [re.compile(x.expression) for x in rules]
+                regexes = []
+                for rule in rules:
+                    try:
+                        regexes.append(re.compile(rule.expression))
+                    except:
+                        raise UserError(gettext(
+                            'account_reconcile.msg_wrong_expression',
+                            expression=rule.expression, rule=rule.id))
                 if regexes:
                     numbers = {}
                     for line in lines:
