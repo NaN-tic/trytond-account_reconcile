@@ -145,9 +145,8 @@ class ReconcileMoves(Wizard):
                             for regex in regexes:
                                 match = regex.search(line.description)
                                 if match:
-                                    id = match.group().replace(' ', '')
-                                    numbers.setdefault(id, [])
-                                    numbers[id].append(line)
+                                    id = match.group(1).replace(' ', '')
+                                    numbers.setdefault(id, []).append(line)
                                     break
                     for lines in numbers.values():
                         if len(lines) > 1:
