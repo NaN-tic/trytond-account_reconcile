@@ -150,7 +150,15 @@ class ReconcileMoves(Wizard):
                             expression=rule.expression, rule=rule.id))
                 if regexes:
                     numbers = {}
+                    count = 0
                     for line in lines:
+                        count += 1
+                        if count % 10000 == 0:
+                            logger.info(
+                                '%d combinations processed' % count)
+                            if datetime.now() > timeout:
+                                logger.info('Timeout reached.')
+                                return list(reconciled)
                         if line.description:
                             for regex in regexes:
                                 match = regex.search(line.description)
@@ -158,7 +166,16 @@ class ReconcileMoves(Wizard):
                                     id = match.group(1).replace(' ', '')
                                     numbers.setdefault(id, []).append(line)
                                     break
+                    count = 0
                     for lines in numbers.values():
+                        count += 1
+                        if count % 10000 == 0:
+                            logger.info(
+                                '%d combinations processed with %d lines '
+                                'reconciled' % (count, len(reconciled)))
+                            if datetime.now() > timeout:
+                                logger.info('Timeout reached.')
+                                return list(reconciled)
                         if len(lines) > 1:
                             amount = sum([x.debit - x.credit for x in lines])
                             if amount == 0:
