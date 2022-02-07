@@ -7,6 +7,7 @@ from . import account
 def register():
     Pool.register(
         account.ReconcileMovesStart,
+        account.ReconcileRule,
         module='account_reconcile', type_='model')
     Pool.register(
         account.ReconcileMoves,

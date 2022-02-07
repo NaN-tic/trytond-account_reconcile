@@ -4,10 +4,16 @@
 <form col="6">
     <label name="company"/>
     <field name="company"/>
+    <label name="max_days"/>
+    <field name="max_days"/>
+    <label name="use_rules"/>
+    <field name="use_rules"/>
+    <label name="use_combinations"/>
+    <field name="use_combinations"/>
+    <newline/>
     <label name="max_lines"/>
     <field name="max_lines"/>
-    <label name="max_months"/>
-    <field name="max_months"/>
+    <newline/>
     <label name="timeout"/>
     <field name="timeout"/>
     <label name="start_date"/>
