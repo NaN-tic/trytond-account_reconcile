@@ -44,7 +44,7 @@ class ReconcileMovesStart(ModelView):
             states={'invisible': ~Bool(Eval('use_combinations'))},
             depends=['use_combinations'])
     max_days = fields.Integer('Maximum days', required=True,
-        help='Maximum difference in months of lines to reconcile.')
+        help='Maximum difference in days of lines to reconcile.')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     timeout = fields.TimeDelta('Maximum Computation Time', required=True)
@@ -61,7 +61,7 @@ class ReconcileMovesStart(ModelView):
 
     @staticmethod
     def default_max_days():
-        return 6
+        return 60
 
     @staticmethod
     def default_timeout():
