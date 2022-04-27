@@ -1,17 +1,16 @@
-# This file is part of the account_reconcile module for Tryton.
-# The COPYRIGHT file at the top level of this repository contains the full
-# copyright notices and license terms.
+
+# This file is part of Tryton.  The COPYRIGHT file at the top level of
+# this repository contains the full copyright notices and license terms.
+
 from decimal import Decimal
-import unittest
 from trytond.pool import Pool
-import trytond.tests.test_tryton
 from trytond.tests.test_tryton import ModuleTestCase, with_transaction
-from trytond.modules.company.tests import create_company, set_company
+from trytond.modules.company.tests import create_company, set_company, CompanyTestMixin
 from trytond.modules.account.tests import create_chart, get_fiscalyear, get_accounts
 
 
-class AccountReconcileTestCase(ModuleTestCase):
-    'Test Account Reconcile module'
+class AccountReconcileTestCase(CompanyTestMixin, ModuleTestCase):
+    'Test AccountReconcile module'
     module = 'account_reconcile'
 
     def create_fiscalyear_and_chart(self, company=None):
@@ -741,8 +740,4 @@ class AccountReconcileTestCase(ModuleTestCase):
         self.assertEqual(len(reconciliations), 1)
 
 
-def suite():
-    suite = trytond.tests.test_tryton.suite()
-    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
-        AccountReconcileTestCase))
-    return suite
+del ModuleTestCase
