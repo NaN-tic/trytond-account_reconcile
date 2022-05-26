@@ -6,7 +6,7 @@ from decimal import Decimal
 from trytond.pool import Pool
 from trytond.tests.test_tryton import ModuleTestCase, with_transaction
 from trytond.modules.company.tests import create_company, set_company, CompanyTestMixin
-from trytond.modules.account.tests import create_chart, get_fiscalyear, get_accounts
+from trytond.modules.account.tests import create_chart, get_fiscalyear
 
 
 class AccountReconcileTestCase(CompanyTestMixin, ModuleTestCase):
@@ -35,7 +35,31 @@ class AccountReconcileTestCase(CompanyTestMixin, ModuleTestCase):
     def get_accounts(self, company):
         pool = Pool()
         Account = pool.get('account.account')
-        accounts = get_accounts(company)
+        accounts = {}
+        accounts['receivable'], = Account.search([
+                ('type.receivable', '=', True),
+                ('company', '=', company.id),
+                ], limit=1)
+        accounts['payable'], = Account.search([
+                ('type.payable', '=', True),
+                ('company', '=', company.id),
+                ], limit=1)
+        accounts['revenue'], = Account.search([
+                ('type.revenue', '=', True),
+                ('company', '=', company.id),
+                ], limit=1)
+        accounts['expense'], = Account.search([
+                ('type.expense', '=', True),
+                ('company', '=', company.id),
+                ], limit=1)
+        accounts['cash'], = Account.search([
+                ('company', '=', company.id),
+                ('name', '=', 'Main Cash'),
+                ], limit=1)
+        accounts['tax'], = Account.search([
+                ('company', '=', company.id),
+                ('name', '=', 'Main Tax'),
+                ], limit=1)
         cash, = Account.search([
                 ('name', '=', 'Main Cash'),
                 ('company', '=', company.id),
@@ -366,7 +390,10 @@ class AccountReconcileTestCase(CompanyTestMixin, ModuleTestCase):
         move_reconcile = MoveReconcile(session_id)
         move_reconcile.start.company = company
         move_reconcile.start.max_lines = '2'
-        move_reconcile.start.max_months = 12
+        move_reconcile.start.max_days = 365
+        move_reconcile.start.timeout = 500
+        move_reconcile.start.use_rules = False
+        move_reconcile.start.use_combinations = True
         move_reconcile.start.start_date = None
         move_reconcile.start.end_date = None
         move_reconcile.start.accounts = []
@@ -383,7 +410,10 @@ class AccountReconcileTestCase(CompanyTestMixin, ModuleTestCase):
         move_reconcile = MoveReconcile(session_id)
         move_reconcile.start.company = company
         move_reconcile.start.max_lines = '3'
-        move_reconcile.start.max_months = 12
+        move_reconcile.start.max_days = 365
+        move_reconcile.start.timeout = 500
+        move_reconcile.start.use_rules = False
+        move_reconcile.start.use_combinations = True
         move_reconcile.start.start_date = None
         move_reconcile.start.end_date = None
         move_reconcile.start.accounts = []
@@ -419,7 +449,10 @@ class AccountReconcileTestCase(CompanyTestMixin, ModuleTestCase):
         move_reconcile = MoveReconcile(session_id)
         move_reconcile.start.company = company
         move_reconcile.start.max_lines = '2'
-        move_reconcile.start.max_months = 12
+        move_reconcile.start.max_days = 365
+        move_reconcile.start.timeout = 500
+        move_reconcile.start.use_rules = False
+        move_reconcile.start.use_combinations = True
         move_reconcile.start.start_date = last_period.start_date
         move_reconcile.start.end_date = last_period.end_date
         move_reconcile.start.accounts = []
@@ -433,13 +466,16 @@ class AccountReconcileTestCase(CompanyTestMixin, ModuleTestCase):
         self.assertEqual(len(to_reconcile), 7)
         # Reconcile filtered by account.
         receivables = Account.search([
-                ('kind', '=', 'receivable')
+                ('type.receivable', '=', 'True')
                 ])
         session_id, _, _ = MoveReconcile.create()
         move_reconcile = MoveReconcile(session_id)
         move_reconcile.start.company = company
         move_reconcile.start.max_lines = '2'
-        move_reconcile.start.max_months = 12
+        move_reconcile.start.max_days = 365
+        move_reconcile.start.timeout = 500
+        move_reconcile.start.use_rules = False
+        move_reconcile.start.use_combinations = True
         move_reconcile.start.start_date = None
         move_reconcile.start.end_date = None
         move_reconcile.start.accounts = receivables
@@ -462,7 +498,10 @@ class AccountReconcileTestCase(CompanyTestMixin, ModuleTestCase):
         move_reconcile = MoveReconcile(session_id)
         move_reconcile.start.company = company
         move_reconcile.start.max_lines = '2'
-        move_reconcile.start.max_months = 12
+        move_reconcile.start.max_days = 365
+        move_reconcile.start.timeout = 500
+        move_reconcile.start.use_rules = False
+        move_reconcile.start.use_combinations = True
         move_reconcile.start.start_date = None
         move_reconcile.start.end_date = None
         move_reconcile.start.accounts = []
@@ -497,7 +536,10 @@ class AccountReconcileTestCase(CompanyTestMixin, ModuleTestCase):
         move_reconcile = MoveReconcile(session_id)
         move_reconcile.start.company = company
         move_reconcile.start.max_lines = '2'
-        move_reconcile.start.max_months = 12
+        move_reconcile.start.max_days = 365
+        move_reconcile.start.timeout = 500
+        move_reconcile.start.use_rules = False
+        move_reconcile.start.use_combinations = True
         move_reconcile.start.start_date = None
         move_reconcile.start.end_date = None
         move_reconcile.start.accounts = []
@@ -514,7 +556,10 @@ class AccountReconcileTestCase(CompanyTestMixin, ModuleTestCase):
         move_reconcile = MoveReconcile(session_id)
         move_reconcile.start.company = company
         move_reconcile.start.max_lines = '3'
-        move_reconcile.start.max_months = 12
+        move_reconcile.start.max_days = 365
+        move_reconcile.start.timeout = 500
+        move_reconcile.start.use_rules = False
+        move_reconcile.start.use_combinations = True
         move_reconcile.start.start_date = None
         move_reconcile.start.end_date = None
         move_reconcile.start.accounts = []
@@ -531,7 +576,10 @@ class AccountReconcileTestCase(CompanyTestMixin, ModuleTestCase):
         move_reconcile = MoveReconcile(session_id)
         move_reconcile.start.company = company
         move_reconcile.start.max_lines = '4'
-        move_reconcile.start.max_months = 12
+        move_reconcile.start.max_days = 365
+        move_reconcile.start.timeout = 500
+        move_reconcile.start.use_rules = False
+        move_reconcile.start.use_combinations = True
         move_reconcile.start.start_date = None
         move_reconcile.start.end_date = None
         move_reconcile.start.accounts = []
@@ -548,7 +596,10 @@ class AccountReconcileTestCase(CompanyTestMixin, ModuleTestCase):
         move_reconcile = MoveReconcile(session_id)
         move_reconcile.start.company = company
         move_reconcile.start.max_lines = '5'
-        move_reconcile.start.max_months = 12
+        move_reconcile.start.max_days = 365
+        move_reconcile.start.timeout = 500
+        move_reconcile.start.use_rules = False
+        move_reconcile.start.use_combinations = True
         move_reconcile.start.start_date = None
         move_reconcile.start.end_date = None
         move_reconcile.start.accounts = []
@@ -580,7 +631,10 @@ class AccountReconcileTestCase(CompanyTestMixin, ModuleTestCase):
         move_reconcile = MoveReconcile(session_id)
         move_reconcile.start.company = company
         move_reconcile.start.max_lines = '5'
-        move_reconcile.start.max_months = 12
+        move_reconcile.start.max_days = 365
+        move_reconcile.start.timeout = 500
+        move_reconcile.start.use_rules = False
+        move_reconcile.start.use_combinations = True
         move_reconcile.start.start_date = None
         move_reconcile.start.end_date = None
         move_reconcile.start.accounts = []
@@ -722,7 +776,10 @@ class AccountReconcileTestCase(CompanyTestMixin, ModuleTestCase):
         move_reconcile = MoveReconcile(session_id)
         move_reconcile.start.company = company
         move_reconcile.start.max_lines = '6'
-        move_reconcile.start.max_months = 12
+        move_reconcile.start.max_days = 365
+        move_reconcile.start.timeout = 500
+        move_reconcile.start.use_rules = False
+        move_reconcile.start.use_combinations = True
         move_reconcile.start.start_date = None
         move_reconcile.start.end_date = None
         move_reconcile.start.accounts = []
