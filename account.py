@@ -32,7 +32,11 @@ class ReconcileMovesStart(ModelView):
             ('type', '!=', None),
             ],
         depends=['company'])
-    parties = fields.Many2Many('party.party', None, None, 'Parties')
+    parties = fields.Many2Many('party.party', None, None, 'Parties',
+        context={
+            'company': Eval('company'),
+        },
+        depends=['company'])
     max_lines = fields.Selection([
             ('2', 'Two'),
             ('3', 'Three'),
