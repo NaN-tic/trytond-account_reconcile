@@ -1,6 +1,18 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:account.move_reconcile.rule,account:"
+msgid "Account"
+msgstr "Cuentas"
+
+msgctxt "field:account.move_reconcile.rule,company:"
+msgid "Company"
+msgstr "Empresa"
+
+msgctxt "field:account.move_reconcile.rule,expression:"
+msgid "Regular Expression"
+msgstr "Expresión regular"
 
 msgctxt "field:account.move_reconcile.start,accounts:"
 msgid "Accounts"
@@ -18,6 +30,10 @@ msgctxt "field:account.move_reconcile.start,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:account.move_reconcile.start,max_days:"
+msgid "Maximum days"
+msgstr "Días Máximos"
+
 msgctxt "field:account.move_reconcile.start,max_lines:"
 msgid "Maximum Lines"
 msgstr "Maximo líneas"
@@ -34,6 +50,26 @@ msgctxt "field:account.move_reconcile.start,start_date:"
 msgid "Start Date"
 msgstr "Fecha inicial"
 
+msgctxt "field:account.move_reconcile.start,timeout:"
+msgid "Maximum Computation Time"
+msgstr "Tiempo máximo de cálculo"
+
+msgctxt "field:account.move_reconcile.start,use_combinations:"
+msgid "Use Combinations"
+msgstr "Combinaciones de uso"
+
+msgctxt "field:account.move_reconcile.start,use_rules:"
+msgid "Use Rules"
+msgstr "Reglas de uso"
+
+msgctxt "help:account.move_reconcile.rule,expression:"
+msgid "Example: Invoice nº((\\d|\\s)+)"
+msgstr "Ejemplo: Factura nº((\\d|\\s)+)"
+
+msgctxt "help:account.move_reconcile.start,max_days:"
+msgid "Maximum difference in days of lines to reconcile."
+msgstr "Máxima diferencia en días de filas a conciliar."
+
 msgctxt "help:account.move_reconcile.start,max_lines:"
 msgid "Maximum number of lines to include on a reconciliation"
 msgstr "Número maximo de apuntes a utilitzar en una conciliación."
@@ -42,17 +78,37 @@ msgctxt "help:account.move_reconcile.start,max_months:"
 msgid "Maximum difference in months of lines to reconcile."
 msgstr "Número maximo de apuntes para reconciliar."
 
+msgctxt "model:account.move_reconcile.rule,name:"
+msgid "Reconcile Rule"
+msgstr "Regla de conciliación"
+
 msgctxt "model:account.move_reconcile.start,name:"
 msgid "Reconcile Moves"
 msgstr "Conciliar movimientos"
+
+msgctxt "model:ir.action,name:act_reconcile_rule"
+msgid "Reconcile Rules"
+msgstr "Regla de conciliación"
 
 msgctxt "model:ir.action,name:wizard_move_reconcile"
 msgid "Automatic Reconciliation"
 msgstr "Conciliación automatica"
 
+msgctxt "model:ir.message,text:msg_wrong_expression"
+msgid "Wrong expression \"%(expression)s\" in rule \"%(rule)s\""
+msgstr "Expresion Erronea \"%(expression)s\" en la regla \"%(rule)s\""
+
+msgctxt "model:ir.rule.group,name:rule_group_reconcile_rule"
+msgid "User in company"
+msgstr "Usuario en la empresa"
+
 msgctxt "model:ir.ui.menu,name:menu_move_reconcile"
 msgid "Automatic Reconciliation"
 msgstr "Conciliación automatica"
+
+msgctxt "model:ir.ui.menu,name:menu_reconcile_rule"
+msgid "Reconcile Rules"
+msgstr "Reglas de conciliación"
 
 msgctxt "selection:account.move_reconcile.start,max_lines:"
 msgid "Five"
