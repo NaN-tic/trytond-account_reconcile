@@ -27,14 +27,14 @@ class ReconcileMovesStart(ModelView):
         readonly=True)
     accounts = fields.Many2Many('account.account', None, None, 'Accounts',
         domain=[
-            ('company', '=', Eval('company')),
+            ('company', '=', Eval('company', -1)),
             ('reconcile', '=', True),
             ('type', '!=', None),
             ],
         depends=['company'])
     parties = fields.Many2Many('party.party', None, None, 'Parties',
         context={
-            'company': Eval('company'),
+            'company': Eval('company', -1),
         },
         depends=['company'])
     max_lines = fields.Selection([
