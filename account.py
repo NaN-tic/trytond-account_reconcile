@@ -30,8 +30,7 @@ class ReconcileMovesStart(ModelView):
             ('company', '=', Eval('company', -1)),
             ('reconcile', '=', True),
             ('type', '!=', None),
-            ],
-        depends=['company'])
+            ])
     parties = fields.Many2Many('party.party', None, None, 'Parties',
         context={
             'company': Eval('company', -1),
@@ -45,8 +44,7 @@ class ReconcileMovesStart(ModelView):
             ('6', 'Six'),
             ], 'Maximum Lines', sort=False, required=True,
             help=('Maximum number of lines to include on a reconciliation'),
-            states={'invisible': ~Bool(Eval('use_combinations'))},
-            depends=['use_combinations'])
+            states={'invisible': ~Bool(Eval('use_combinations'))})
     max_days = fields.Integer('Maximum days', required=True,
         help='Maximum difference in days of lines to reconcile.')
     start_date = fields.Date('Start Date')
