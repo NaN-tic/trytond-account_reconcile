@@ -81,7 +81,7 @@ class ReconcileRule(ModelSQL, ModelView):
     __name__ = 'account.move_reconcile.rule'
     company = fields.Many2One('company.company', 'Company', required=True)
     account = fields.Many2One('account.account', 'Account', required=True,
-        domain=[('company', '=', Eval('company', -1))], depends=['company'])
+        domain=[('company', '=', Eval('company', -1))])
     expression = fields.Char('Regular Expression',
         help='Example: Invoice nº((\\d|\\s)+)')
 
