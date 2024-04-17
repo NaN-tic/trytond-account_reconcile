@@ -41,7 +41,7 @@
 
         <record model="ir.rule.group" id="rule_group_reconcile_rule">
             <field name="name">User in company</field>
-            <field name="model" search="[('model', '=', 'account.move_reconcile.rule')]"/>
+            <field name="model">account.move_reconcile.rule</field>
             <field name="global_p" eval="True"/>
         </record>
         <record model="ir.rule" id="rule_reconcile_rule">
