@@ -39,37 +39,33 @@ class AccountReconcileTestCase(CompanyTestMixin, ModuleTestCase):
         accounts['receivable'], = Account.search([
                 ('type.receivable', '=', True),
                 ('company', '=', company.id),
+                ('closed', '=', False),
                 ], limit=1)
         accounts['payable'], = Account.search([
                 ('type.payable', '=', True),
                 ('company', '=', company.id),
+                ('closed', '=', False),
                 ], limit=1)
         accounts['revenue'], = Account.search([
                 ('type.revenue', '=', True),
                 ('company', '=', company.id),
+                ('closed', '=', False),
                 ], limit=1)
         accounts['expense'], = Account.search([
                 ('type.expense', '=', True),
                 ('company', '=', company.id),
+                ('closed', '=', False),
                 ], limit=1)
         accounts['cash'], = Account.search([
                 ('company', '=', company.id),
-                ('name', '=', 'Main Cash'),
+                ('code', '=', '1.1.1'), # Main Cash
+                ('closed', '=', False),
                 ], limit=1)
         accounts['tax'], = Account.search([
                 ('company', '=', company.id),
-                ('name', '=', 'Main Tax'),
+                ('code', '=', '6.3.6'), # Main Tax
+                ('closed', '=', False),
                 ], limit=1)
-        cash, = Account.search([
-                ('name', '=', 'Main Cash'),
-                ('company', '=', company.id),
-                ])
-        accounts['cash'] = cash
-        tax, = Account.search([
-                ('name', '=', 'Main Tax'),
-                ('company', '=', company.id),
-                ])
-        accounts['tax'] = tax
         return accounts
 
     def create_parties(self, company):
@@ -466,8 +462,10 @@ class AccountReconcileTestCase(CompanyTestMixin, ModuleTestCase):
         self.assertEqual(len(to_reconcile), 7)
         # Reconcile filtered by account.
         receivables = Account.search([
-                ('type.receivable', '=', 'True')
+                ('type.receivable', '=', 'True'),
+                ('closed', '!=', True),
                 ])
+        receivable_ids = [r.id for r in receivables]
         session_id, _, _ = MoveReconcile.create()
         move_reconcile = MoveReconcile(session_id)
         move_reconcile.start.company = company
@@ -486,8 +484,7 @@ class AccountReconcileTestCase(CompanyTestMixin, ModuleTestCase):
                     ('reconciliation', '=', None),
                     ])
         self.assertEqual(len(data['res_id']), 2)
-        receivable, = receivables
-        self.assertEqual(all([l.account == receivable for l in
+        self.assertEqual(all([l.account.id in receivable_ids for l in
                     Line.browse(data['res_id'])]), True)
         self.assertEqual(len(to_reconcile), 5)
         # Reconcile filtered by party.
