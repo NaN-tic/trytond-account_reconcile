@@ -1,0 +1,157 @@
+#
+msgid ""
+msgstr ""
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "field:account.move_reconcile.rule,account:"
+msgid "Account"
+msgstr "账户"
+
+msgctxt "field:account.move_reconcile.rule,company:"
+msgid "Company"
+msgstr "公司"
+
+msgctxt "field:account.move_reconcile.rule,expression:"
+msgid "Regular Expression"
+msgstr "正则表达式"
+
+msgctxt "field:account.move_reconcile.start,accounts:"
+msgid "Accounts"
+msgstr "账户"
+
+msgctxt "field:account.move_reconcile.start,company:"
+msgid "Company"
+msgstr "公司"
+
+msgctxt "field:account.move_reconcile.start,end_date:"
+msgid "End Date"
+msgstr "结账日期"
+
+msgctxt "field:account.move_reconcile.start,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:account.move_reconcile.start,max_days:"
+msgid "Maximum days"
+msgstr "最大天数"
+
+msgctxt "field:account.move_reconcile.start,max_lines:"
+msgid "Maximum Lines"
+msgstr "最大分录数"
+
+msgctxt "field:account.move_reconcile.start,max_months:"
+msgid "Maximum Months"
+msgstr "最大月数"
+
+msgctxt "field:account.move_reconcile.start,parties:"
+msgid "Parties"
+msgstr "参与者"
+
+msgctxt "field:account.move_reconcile.start,start_date:"
+msgid "Start Date"
+msgstr "启用日期"
+
+msgctxt "field:account.move_reconcile.start,timeout:"
+msgid "Maximum Computation Time"
+msgstr "最长计算时间"
+
+msgctxt "field:account.move_reconcile.start,use_combinations:"
+msgid "Use Combinations"
+msgstr "使用组合"
+
+msgctxt "field:account.move_reconcile.start,use_rules:"
+msgid "Use Rules"
+msgstr "使用规则"
+
+msgctxt "help:account.move_reconcile.rule,expression:"
+msgid "Example: Invoice nº((\\d|\\s)+)"
+msgstr "示例：Invoice nº((\\d|\\s)+)"
+
+msgctxt "help:account.move_reconcile.start,max_days:"
+msgid "Maximum difference in days of lines to reconcile."
+msgstr "待核销分录之间允许的最大日期差（天）。"
+
+msgctxt "help:account.move_reconcile.start,max_lines:"
+msgid "Maximum number of lines to include on a reconciliation"
+msgstr "一次核销允许包含的最大分录数。"
+
+msgctxt "help:account.move_reconcile.start,max_months:"
+msgid "Maximum difference in months of lines to reconcile."
+msgstr "待核销分录之间允许的最大日期差（月）。"
+
+msgctxt "model:account.move_reconcile.rule,name:"
+msgid "Reconcile Rule"
+msgstr "核销规则"
+
+msgctxt "model:account.move_reconcile.start,name:"
+msgid "Reconcile Moves"
+msgstr "核销凭证"
+
+msgctxt "model:ir.action,name:act_reconcile_rule"
+msgid "Reconcile Rules"
+msgstr "核销规则"
+
+msgctxt "model:ir.action,name:wizard_move_reconcile"
+msgid "Automatic Reconciliation"
+msgstr "自动核销"
+
+#, python-format
+msgctxt "model:ir.message,text:msg_wrong_expression"
+msgid "Wrong expression \"%(expression)s\" in rule \"%(rule)s\""
+msgstr "规则“%(rule)s”中的表达式“%(expression)s”有误。"
+
+msgctxt "model:ir.rule.group,name:rule_group_reconcile_rule"
+msgid "User in company"
+msgstr "公司内用户"
+
+msgctxt "model:ir.ui.menu,name:menu_move_reconcile"
+msgid "Automatic Reconciliation"
+msgstr "自动核销"
+
+msgctxt "model:ir.ui.menu,name:menu_reconcile_rule"
+msgid "Reconcile Rules"
+msgstr "核销规则"
+
+msgctxt "selection:account.move_reconcile.start,max_lines:"
+msgid "Five"
+msgstr "五"
+
+msgctxt "selection:account.move_reconcile.start,max_lines:"
+msgid "Four"
+msgstr "四"
+
+msgctxt "selection:account.move_reconcile.start,max_lines:"
+msgid "Six"
+msgstr "六"
+
+msgctxt "selection:account.move_reconcile.start,max_lines:"
+msgid "Three"
+msgstr "三"
+
+msgctxt "selection:account.move_reconcile.start,max_lines:"
+msgid "Two"
+msgstr "二"
+
+msgctxt "view:account.move_reconcile.start:"
+msgid "All accounts if empty"
+msgstr "留空则选择所有科目"
+
+msgctxt "view:account.move_reconcile.start:"
+msgid "All parties if empty"
+msgstr "留空则选择所有往来单位"
+
+msgctxt "view:account.move_reconcile.start:"
+msgid "Reconcile Moves"
+msgstr "核销凭证"
+
+msgctxt "wizard_button:account.move_reconcile,start,end:"
+msgid "Cancel"
+msgstr "取消"
+
+msgctxt "wizard_button:account.move_reconcile,start,reconcile:"
+msgid "Ok"
+msgstr "确定"
