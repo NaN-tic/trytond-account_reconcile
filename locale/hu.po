@@ -1,0 +1,157 @@
+#
+msgid ""
+msgstr ""
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "field:account.move_reconcile.rule,account:"
+msgid "Account"
+msgstr "Számla"
+
+msgctxt "field:account.move_reconcile.rule,company:"
+msgid "Company"
+msgstr "Cég"
+
+msgctxt "field:account.move_reconcile.rule,expression:"
+msgid "Regular Expression"
+msgstr "Reguláris kifejezés"
+
+msgctxt "field:account.move_reconcile.start,accounts:"
+msgid "Accounts"
+msgstr "Számlák"
+
+msgctxt "field:account.move_reconcile.start,company:"
+msgid "Company"
+msgstr "Cég"
+
+msgctxt "field:account.move_reconcile.start,end_date:"
+msgid "End Date"
+msgstr "Befejező dátum"
+
+msgctxt "field:account.move_reconcile.start,id:"
+msgid "ID"
+msgstr "Azonosító"
+
+msgctxt "field:account.move_reconcile.start,max_days:"
+msgid "Maximum days"
+msgstr "Maximális napkülönbség"
+
+msgctxt "field:account.move_reconcile.start,max_lines:"
+msgid "Maximum Lines"
+msgstr "Tételek maximális száma"
+
+msgctxt "field:account.move_reconcile.start,max_months:"
+msgid "Maximum Months"
+msgstr "Maximális hónapkülönbség"
+
+msgctxt "field:account.move_reconcile.start,parties:"
+msgid "Parties"
+msgstr "Ügyfelek"
+
+msgctxt "field:account.move_reconcile.start,start_date:"
+msgid "Start Date"
+msgstr "Kezdődátum"
+
+msgctxt "field:account.move_reconcile.start,timeout:"
+msgid "Maximum Computation Time"
+msgstr "Maximális számítási idő"
+
+msgctxt "field:account.move_reconcile.start,use_combinations:"
+msgid "Use Combinations"
+msgstr "Kombinációk használata"
+
+msgctxt "field:account.move_reconcile.start,use_rules:"
+msgid "Use Rules"
+msgstr "Szabályok használata"
+
+msgctxt "help:account.move_reconcile.rule,expression:"
+msgid "Example: Invoice nº((\\d|\\s)+)"
+msgstr "Példa: Invoice nº((\\d|\\s)+)"
+
+msgctxt "help:account.move_reconcile.start,max_days:"
+msgid "Maximum difference in days of lines to reconcile."
+msgstr "Az egyeztetendő tételek dátumai közötti maximális eltérés napokban."
+
+msgctxt "help:account.move_reconcile.start,max_lines:"
+msgid "Maximum number of lines to include on a reconciliation"
+msgstr "Az egy egyeztetésbe bevonható tételek maximális száma"
+
+msgctxt "help:account.move_reconcile.start,max_months:"
+msgid "Maximum difference in months of lines to reconcile."
+msgstr "Az egyeztetendő tételek dátumai közötti maximális eltérés hónapokban."
+
+msgctxt "model:account.move_reconcile.rule,name:"
+msgid "Reconcile Rule"
+msgstr "Egyeztetési szabály"
+
+msgctxt "model:account.move_reconcile.start,name:"
+msgid "Reconcile Moves"
+msgstr "Könyvelési tételek egyeztetése"
+
+msgctxt "model:ir.action,name:act_reconcile_rule"
+msgid "Reconcile Rules"
+msgstr "Egyeztetési szabályok"
+
+msgctxt "model:ir.action,name:wizard_move_reconcile"
+msgid "Automatic Reconciliation"
+msgstr "Automatikus egyeztetés"
+
+#, python-format
+msgctxt "model:ir.message,text:msg_wrong_expression"
+msgid "Wrong expression \"%(expression)s\" in rule \"%(rule)s\""
+msgstr "Hibás „%(expression)s” kifejezés a(z) „%(rule)s” szabályban"
+
+msgctxt "model:ir.rule.group,name:rule_group_reconcile_rule"
+msgid "User in company"
+msgstr "Felhasználó a vállalatban"
+
+msgctxt "model:ir.ui.menu,name:menu_move_reconcile"
+msgid "Automatic Reconciliation"
+msgstr "Automatikus egyeztetés"
+
+msgctxt "model:ir.ui.menu,name:menu_reconcile_rule"
+msgid "Reconcile Rules"
+msgstr "Egyeztetési szabályok"
+
+msgctxt "selection:account.move_reconcile.start,max_lines:"
+msgid "Five"
+msgstr "Öt"
+
+msgctxt "selection:account.move_reconcile.start,max_lines:"
+msgid "Four"
+msgstr "Négy"
+
+msgctxt "selection:account.move_reconcile.start,max_lines:"
+msgid "Six"
+msgstr "Hat"
+
+msgctxt "selection:account.move_reconcile.start,max_lines:"
+msgid "Three"
+msgstr "Három"
+
+msgctxt "selection:account.move_reconcile.start,max_lines:"
+msgid "Two"
+msgstr "Kettő"
+
+msgctxt "view:account.move_reconcile.start:"
+msgid "All accounts if empty"
+msgstr "Üresen hagyva az összes főkönyvi számla"
+
+msgctxt "view:account.move_reconcile.start:"
+msgid "All parties if empty"
+msgstr "Üresen hagyva az összes partner"
+
+msgctxt "view:account.move_reconcile.start:"
+msgid "Reconcile Moves"
+msgstr "Könyvelési tételek egyeztetése"
+
+msgctxt "wizard_button:account.move_reconcile,start,end:"
+msgid "Cancel"
+msgstr "Mégse"
+
+msgctxt "wizard_button:account.move_reconcile,start,reconcile:"
+msgid "Ok"
+msgstr "Rendben"
