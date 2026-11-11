@@ -57,4 +57,14 @@
             action="act_reconcile_rule" id="menu_reconcile_rule"/>
 
     </data>
+    <data>
+        <record model="ir.action-res.group" id="move_reconcile_group_account">
+            <field name="action" ref="wizard_move_reconcile"/>
+            <field name="group" ref="account.group_account"/>
+        </record>
+        <record model="ir.action-res.group" id="move_reconcile_group_account_admin">
+            <field name="action" ref="wizard_move_reconcile"/>
+            <field name="group" ref="account.group_account_admin"/>
+        </record>
+    </data>
 </tryton>
