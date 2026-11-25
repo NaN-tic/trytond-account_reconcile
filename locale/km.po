@@ -1,0 +1,157 @@
+#
+msgid ""
+msgstr ""
+"Language: km\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "field:account.move_reconcile.rule,account:"
+msgid "Account"
+msgstr "គណនី"
+
+msgctxt "field:account.move_reconcile.rule,company:"
+msgid "Company"
+msgstr "ក្រុមហ៊ុន"
+
+msgctxt "field:account.move_reconcile.rule,expression:"
+msgid "Regular Expression"
+msgstr "កន្សោមនិយ័ត"
+
+msgctxt "field:account.move_reconcile.start,accounts:"
+msgid "Accounts"
+msgstr "គណនី"
+
+msgctxt "field:account.move_reconcile.start,company:"
+msgid "Company"
+msgstr "ក្រុមហ៊ុន"
+
+msgctxt "field:account.move_reconcile.start,end_date:"
+msgid "End Date"
+msgstr "កាលបរិច្ឆេទបញ្ចប់"
+
+msgctxt "field:account.move_reconcile.start,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:account.move_reconcile.start,max_days:"
+msgid "Maximum days"
+msgstr "ចំនួនថ្ងៃអតិបរមា"
+
+msgctxt "field:account.move_reconcile.start,max_lines:"
+msgid "Maximum Lines"
+msgstr "ចំនួនបន្ទាត់អតិបរមា"
+
+msgctxt "field:account.move_reconcile.start,max_months:"
+msgid "Maximum Months"
+msgstr "ចំនួនខែអតិបរមា"
+
+msgctxt "field:account.move_reconcile.start,parties:"
+msgid "Parties"
+msgstr "ភាគី"
+
+msgctxt "field:account.move_reconcile.start,start_date:"
+msgid "Start Date"
+msgstr "កាលបរិច្ឆេទចាប់ផ្តើម"
+
+msgctxt "field:account.move_reconcile.start,timeout:"
+msgid "Maximum Computation Time"
+msgstr "រយៈពេលគណនាអតិបរមា"
+
+msgctxt "field:account.move_reconcile.start,use_combinations:"
+msgid "Use Combinations"
+msgstr "ប្រើបន្សំ"
+
+msgctxt "field:account.move_reconcile.start,use_rules:"
+msgid "Use Rules"
+msgstr "ប្រើវិធាន"
+
+msgctxt "help:account.move_reconcile.rule,expression:"
+msgid "Example: Invoice nº((\\d|\\s)+)"
+msgstr "ឧទាហរណ៍៖ Invoice nº((\\d|\\s)+)"
+
+msgctxt "help:account.move_reconcile.start,max_days:"
+msgid "Maximum difference in days of lines to reconcile."
+msgstr "ចំនួនថ្ងៃខុសគ្នាអតិបរមារវាងបន្ទាត់ដែលត្រូវផ្ទៀងផ្ទាត់សមតុល្យ។"
+
+msgctxt "help:account.move_reconcile.start,max_lines:"
+msgid "Maximum number of lines to include on a reconciliation"
+msgstr "ចំនួនបន្ទាត់អតិបរមាដែលត្រូវបញ្ចូលក្នុងការផ្ទៀងផ្ទាត់សមតុល្យ"
+
+msgctxt "help:account.move_reconcile.start,max_months:"
+msgid "Maximum difference in months of lines to reconcile."
+msgstr "ចំនួនខែខុសគ្នាអតិបរមារវាងបន្ទាត់ដែលត្រូវផ្ទៀងផ្ទាត់សមតុល្យ។"
+
+msgctxt "model:account.move_reconcile.rule,name:"
+msgid "Reconcile Rule"
+msgstr "វិធានផ្ទៀងផ្ទាត់សមតុល្យ"
+
+msgctxt "model:account.move_reconcile.start,name:"
+msgid "Reconcile Moves"
+msgstr "ផ្ទៀងផ្ទាត់សមតុល្យកំណត់ត្រាគណនេយ្យ"
+
+msgctxt "model:ir.action,name:act_reconcile_rule"
+msgid "Reconcile Rules"
+msgstr "វិធានផ្ទៀងផ្ទាត់សមតុល្យ"
+
+msgctxt "model:ir.action,name:wizard_move_reconcile"
+msgid "Automatic Reconciliation"
+msgstr "ការផ្ទៀងផ្ទាត់សមតុល្យដោយស្វ័យប្រវត្តិ"
+
+#, python-format
+msgctxt "model:ir.message,text:msg_wrong_expression"
+msgid "Wrong expression \"%(expression)s\" in rule \"%(rule)s\""
+msgstr "កន្សោម «%(expression)s» មិនត្រឹមត្រូវក្នុងវិធាន «%(rule)s»"
+
+msgctxt "model:ir.rule.group,name:rule_group_reconcile_rule"
+msgid "User in company"
+msgstr "អ្នកប្រើប្រាស់ក្នុងក្រុមហ៊ុន"
+
+msgctxt "model:ir.ui.menu,name:menu_move_reconcile"
+msgid "Automatic Reconciliation"
+msgstr "ការផ្ទៀងផ្ទាត់សមតុល្យដោយស្វ័យប្រវត្តិ"
+
+msgctxt "model:ir.ui.menu,name:menu_reconcile_rule"
+msgid "Reconcile Rules"
+msgstr "វិធានផ្ទៀងផ្ទាត់សមតុល្យ"
+
+msgctxt "selection:account.move_reconcile.start,max_lines:"
+msgid "Five"
+msgstr "ប្រាំ"
+
+msgctxt "selection:account.move_reconcile.start,max_lines:"
+msgid "Four"
+msgstr "បួន"
+
+msgctxt "selection:account.move_reconcile.start,max_lines:"
+msgid "Six"
+msgstr "ប្រាំមួយ"
+
+msgctxt "selection:account.move_reconcile.start,max_lines:"
+msgid "Three"
+msgstr "បី"
+
+msgctxt "selection:account.move_reconcile.start,max_lines:"
+msgid "Two"
+msgstr "ពីរ"
+
+msgctxt "view:account.move_reconcile.start:"
+msgid "All accounts if empty"
+msgstr "គណនីទាំងអស់ ប្រសិនបើទុកឱ្យទទេ"
+
+msgctxt "view:account.move_reconcile.start:"
+msgid "All parties if empty"
+msgstr "ភាគីទាំងអស់ ប្រសិនបើទុកឱ្យទទេ"
+
+msgctxt "view:account.move_reconcile.start:"
+msgid "Reconcile Moves"
+msgstr "ផ្ទៀងផ្ទាត់សមតុល្យកំណត់ត្រាគណនេយ្យ"
+
+msgctxt "wizard_button:account.move_reconcile,start,end:"
+msgid "Cancel"
+msgstr "បោះបង់"
+
+msgctxt "wizard_button:account.move_reconcile,start,reconcile:"
+msgid "Ok"
+msgstr "យល់ព្រម"
